@@ -1,0 +1,1 @@
+# samples_for_nrf_connect_sdk
