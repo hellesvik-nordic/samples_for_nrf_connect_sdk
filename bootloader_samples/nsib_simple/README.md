@@ -11,3 +11,9 @@ nrfjprog --reset --sectorerase --program build/zephyr/signed_by_b0_s0_image.hex
 ```
 
 See [Firmware Updates](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/nrf/ug_fw_update.html) for more informationon this.
+
+The `nsib_priv.pem` key was generated using:
+```
+${NCS_PATH}/bootloader/mcuboot/scripts/imgtool.py keygen -k nsib_priv.pem -t ecdsa-p256
+```
+Also see the [Imgtool documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
