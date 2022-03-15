@@ -1,16 +1,4 @@
 sample:
-  description: Hello World sample, the simplest Zephyr
+  description: Simple MCUBoot sample using nrfjprog to update
     application
-  name: hello world
-common:
-    tags: introduction
-    integration_platforms:
-      - native_posix
-    harness: console
-    harness_config:
-      type: one_line
-      regex:
-        - "Hello World! (.*)"
-tests:
-  sample.basic.helloworld:
-    tags: introduction
+  name: Simple MCUBoot sample

@@ -1,5 +1,5 @@
 # NSIB Simple sample
-Simplest possible(I hope) sample for using NSIB.
+Simplest possible(I hope) sample for using Nordic Secure Immutable Bootloader (NSIB).
 Build and flash the program using west.
 
 Then increment CONFIG_FW_INFO_FIRMWARE_VERSION.

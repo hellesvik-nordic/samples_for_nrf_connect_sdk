@@ -9,5 +9,5 @@
 
 void main(void)
 {
-	printk("HHHello World! %s\n", CONFIG_BOARD);
+	printk("Hello World! %s\n", CONFIG_BOARD);
 }
