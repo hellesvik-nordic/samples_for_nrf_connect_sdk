@@ -1,0 +1,4 @@
+sample:
+  description: Simple MCUBoot sample using SMP to update
+    application
+  name: Simple MCUBoot SMP sample
