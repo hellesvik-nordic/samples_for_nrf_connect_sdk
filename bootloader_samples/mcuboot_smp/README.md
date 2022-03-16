@@ -8,6 +8,7 @@ J-Link>exit
 ```
 Build and flash the program using west.
 
+Change something to see a change.
 Build the program again using west. Do not flash this time.
 
 Program the new image using [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/zephyr/guides/device_mgmt/mcumgr.html):
