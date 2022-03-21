@@ -31,8 +31,8 @@ mcumgr -c acm0 image confirm 2348de4f84cb19c1c2721662ad1275da5c21eca749da9b32db2
 Then reboot the Developement Kit. This will load the new MCUBoot image its slot. 
 Reboot the Developement Kit again to load using the new version of MCUBoot.
 
-Bug: 
-After updating MCUBoot, I were not able to update it again. 
+If you want to update MCUBoot multiple times, you should alternate between signed_by_mcuboot_and_b0_s1_image_update and signed_by_mcuboot_and_b0_s0_image_update.
+This is so that you will be able to boot back into the already functioning MCUBoot if the one you upload is not validated correctly.
 
 ## Key generation
 The keys in this sample was generated using:
