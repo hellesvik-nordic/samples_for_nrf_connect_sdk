@@ -1,0 +1,4 @@
+sample:
+  description: MCUBoot sample using SMP and external flash
+    application
+  name: MCUBoot SMP and external flash 
