@@ -1,0 +1,4 @@
+sample:
+  description: MCUBoot sample using SMP server and manually signed images
+    application
+  name: MCUBoot with manual signed images
