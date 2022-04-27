@@ -11,5 +11,8 @@
 void main(void)
 {
     img_mgmt_register_group();
-	printk("BBB  Hello World! %s\n", CONFIG_BOARD);
+	printk("DDD  Hello World! %s\n", CONFIG_BOARD);
+    while(1){
+        k_sleep(K_SECONDS(1));
+    }
 }
