@@ -6,17 +6,13 @@
 
 #include <zephyr.h>
 #include <sys/printk.h>
-#include <dk_buttons_and_leds.h>
+#include "img_mgmt/img_mgmt.h"
 
 void main(void)
 {
-    printk("FFF\n");
-    dk_leds_init();
-    for(;;){
+    img_mgmt_register_group();
+	printk("BBB  Hello World! %s\n", CONFIG_BOARD);
+    while(1){
         k_sleep(K_SECONDS(1));
-        dk_set_led_on(1);
-        k_sleep(K_SECONDS(1));
-        dk_set_led_off(1);
-
     }
 }
