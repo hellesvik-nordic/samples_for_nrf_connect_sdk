@@ -58,3 +58,14 @@ To update the Network Core:
 mcumgr -c acm image upload -n 3 build/zephyr/net_core_app_update.bin
 ```
 Wait 2 minutes for the image to be copied to the netcore, and reset the nRF5340 after.
+
+The -n numbers are set as follows:
+
+slot 0 - image 0 primary
+slot 1 - image 0 secondary
+slot 3 - image 1 primary
+slot 4 - image 1 secondary (Does not exist)
+
+
+
+
