@@ -20,19 +20,15 @@ mcuboot_primary:
   - mcuboot_pad
   - app
   region: flash_primary
-  size: 0xe0000
+  size: 0x50000
   span: *id001
 mcuboot_primary_app:
   address: 0x18200
   orig_span: &id002
   - app
   region: flash_primary
-  size: 0xdfe00
+  size: 0x4fe00
   span: *id002
-settings_storage:
-  address: 0xf0000
-  region: flash_primary
-  size: 0x10000
 mcuboot_primary_1:
   address: 0x0
   size: 0x40000
@@ -40,7 +36,7 @@ mcuboot_primary_1:
   region: ram_flash
 mcuboot_secondary:
   address: 0x00000
-  size: 0xe0000
+  size: 0x50000
   device: MX25R64
   region: external_flash
 mcuboot_secondary_1:
