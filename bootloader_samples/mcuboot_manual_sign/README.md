@@ -34,6 +34,7 @@ Now use imgtool to sign your application, both for hex file and for bin file.
 $NRF_CONNECT_PATH/bootloader/mcuboot/scripts/imgtool.py sign --header-size 0x200 --align 4 --slot-size 0x79e00 --version 1.0.0 --pad-header --key keys/test_priv.pem build/zephyr/app_to_sign.bin app_manually_signed.bin
 $NRF_CONNECT_PATH/bootloader/mcuboot/scripts/imgtool.py sign --header-size 0x200 --align 4 --slot-size 0x79e00 --version 1.0.0 --pad-header --key keys/test_priv.pem build/zephyr/zephyr.hex app_manually_signed.hex
 ```
+DISCLAIMER: You should make sure the arguments for this signing command are right for your application. See the [imgtool.py documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
 
 First time, you need to use nrfjprog to program your application. You can not use mcumgr, as the application must run to have SMP Server active. 
 An alternative could be to use serial recovery mode instead.
