@@ -32,7 +32,7 @@ python3 scripts/read_eraseprotect_status.py
 
 To disable eraseprotect, the firmware has written a key to an internal [ERASEPROTECT.DISABLE](https://infocenter.nordicsemi.com/topic/ps_nrf5340/ctrl-ap.html?cp=3_0_0_7_9_6_5#unique_1767310017). Write the same key to another, different [ERASEPROTECT.DISABLE](https://infocenter.nordicsemi.com/topic/ps_nrf5340/ctrl-ap.html?cp=3_0_0_7_9_6_7#unique_1545884140) with the script:
 ```
-python3 sripts/disable_eraseprotecy.py
+python3 scripts/disable_eraseprotecy.py
 ```
 
 ## Alternatives
