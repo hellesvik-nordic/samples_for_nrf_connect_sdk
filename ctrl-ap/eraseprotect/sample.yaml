@@ -1,16 +1,3 @@
 sample:
-  description: Hello World sample, the simplest Zephyr
-    application
-  name: hello world
-common:
-    tags: introduction
-    integration_platforms:
-      - native_posix
-    harness: console
-    harness_config:
-      type: one_line
-      regex:
-        - "Hello World! (.*)"
-tests:
-  sample.basic.helloworld:
-    tags: introduction
+  description: Simple sample to show how to use the ERASEPROTECT feature for the nRF5340DK
+  name: F5340 ERASEPROTECT sample

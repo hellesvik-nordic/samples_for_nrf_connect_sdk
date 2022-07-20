@@ -14,21 +14,24 @@ static void config_nvmc(uint32_t val)
     while (!NRF_NVMC_S->READY);
 }
 
-
 void main(void)
 {
     uint32_t read_val;
 
-    read_val= NRF_CTRLAP_S->ERASEPROTECT.LOCK;
-    printk(" NRF_CTRLAP_S->ERASEPROTECT.LOCK: 0x%08x\n",read_val);
+    printk("Start eraseprotect sample.\n");
+    NRF_CTRLAP_S->ERASEPROTECT.DISABLE = 0x00000001;
+    // Somehow, reading the value back does not work.
+    // printk("NRF_CTRLAP_S->ERASEPROTECT.DISABLE: %08x\n",NRF_CTRLAP_S->ERASEPROTECT.DISABLE);
 
-    config_nvmc(NVMC_CONFIG_WEN_Wen);
-    NRF_CTRLAP_S->ERASEPROTECT.DISABLE = 0x12345678;
-    config_nvmc(NVMC_CONFIG_WEN_Ren);
-    /* NVIC_SystemReset(); */
+    if(NRF_UICR_S->ERASEPROTECT){
+        config_nvmc(NVMC_CONFIG_WEN_Wen);
+        NRF_UICR_S->ERASEPROTECT=0x00000000;
+        config_nvmc(NVMC_CONFIG_WEN_Ren);
+        NVIC_SystemReset();
+    }
 
-    read_val= NRF_CTRLAP_S->ERASEPROTECT.DISABLE;
-    printk(" NRF_CTRLAP_S->ERASEPROTECT.DISABLE: 0x%08x\n",read_val);
-
-	printk("Hello World! %s\n", CONFIG_BOARD);
+    printk("Entering forever loop.\n");
+    while(1){
+        k_sleep(K_SECONDS(1));
+    }
 }
