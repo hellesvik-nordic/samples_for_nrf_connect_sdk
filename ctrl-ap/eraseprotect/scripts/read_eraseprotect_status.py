@@ -8,9 +8,6 @@ ap_id = 2 if target_cp == LowLevel.CoProcessor.CP_APPLICATION else 3
 # CTRL-AP addr offsets.
 eraseprotect_status_addr = 0x018
 
-addrs = [approtect_disable_addr]
-if target_cp == LowLevel.CoProcessor.CP_APPLICATION:
-    addrs.append(secureapprotect_disable_addr)
 print("Start")
 with LowLevel.API("NRF53", log=True) as nrf:
     print("Connecting to debugger")
