@@ -19,6 +19,19 @@ mcumgr -c acm image upload build/zephyr/app_update.bin
 mcumgr -c acm0 image list
 ```
 
+Then tell MCUBoot to boot from the new slot next reboot using one of these commands:
+```
+mcumgr -c acm0 image test <SLOT1_HASH>
+mcumgr -c acm0 image confirm <SLOT1_HASH>
+```
+
+Lastly, reset the DK by pressing the reset button or running one of these commands:
+```
+mcumgr -c acm0 reset
+nrfjprog --reset
+```
+
+
 
 See [Using MCUboot in NRF Connect SDK](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/readme-ncs.html) for more informationon.
 
@@ -26,4 +39,4 @@ The `child_image/custom_priv.pem` key was generated using:
 ```
 ${NCS_PATH}/bootloader/mcuboot/scripts/imgtool.py keygen -k custom_priv.pem -t ecdsa-p256
 ```
-Also see the [Imgtool documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
+Aslso see the [Imgtool documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
