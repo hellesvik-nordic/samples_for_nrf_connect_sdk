@@ -1,4 +1,5 @@
 /*
+ *
  * Copyright (c) 2012-2014 Wind River Systems, Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -11,7 +12,7 @@
 void main(void)
 {
     img_mgmt_register_group();
-	printk("CCC  Hello World! %s\n", CONFIG_BOARD);
+	printk("Change this to see change.\n");
     while(1){
         k_sleep(K_SECONDS(1));
     }

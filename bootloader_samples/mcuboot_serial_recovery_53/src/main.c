@@ -9,7 +9,7 @@
 
 void main(void)
 {
-	printk("Hello World! %s\n", CONFIG_BOARD);
+	printk("Change this to see it change\n");
     while(1){
         k_sleep(K_SECONDS(1));
     }

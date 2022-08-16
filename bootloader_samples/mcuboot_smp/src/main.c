@@ -11,5 +11,5 @@
 void main(void)
 {
     img_mgmt_register_group();
-	printk("HHello World! %s\n", CONFIG_BOARD);
+	printk("Change this to see it change.\n");
 }

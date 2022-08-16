@@ -9,5 +9,6 @@
 
 void main(void)
 {
+	printk("Change this to see change.\n");
 	printk("Firmware version %d\n", CONFIG_FW_INFO_FIRMWARE_VERSION);
 }
