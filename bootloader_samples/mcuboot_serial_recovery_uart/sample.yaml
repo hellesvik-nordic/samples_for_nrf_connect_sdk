@@ -1,3 +1,0 @@
-sample:
-  description: Simple MCUBoot sample using Serial Recovery over UART.
-  name: Simple MCUBoot Serial Recovery
