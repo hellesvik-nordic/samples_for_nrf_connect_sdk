@@ -1,4 +1,4 @@
-# Allocate more flash for MCUBOOT with USB DFU enabled
+# Allocate more flash for MCUBOOT with CDC ACM enabled
 mcuboot:
   address: 0x0
   end_address: 0x10000

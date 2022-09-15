@@ -1,4 +1,4 @@
-# MCUBoot Serial Recovery Sample
+# MCUBoot Serial Recovery Sample over USB CDC
 
 ## Prepare the Developement Kit
 Disable the Mass Storage feature on the device, so that it does not interfere:
@@ -20,8 +20,8 @@ west flash
 To activate the Serial Recovery Mode, hold Button 1 while restarting the Developement Kit.
 Now, you should be able communicate with the bootloader using [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/zephyr/guides/device_mgmt/mcumgr.html):
 ```
-mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
-mcumgr -c acm0 image list
+mcumgr conn add acm1 type="serial" connstring="dev=/dev/ttyACM1,baud=115200,mtu=512"
+mcumgr -c acm1 image list
 ```
 The list command should print:
 ```
@@ -38,7 +38,10 @@ Change something in the sample to see a difference. Build the sample again and u
 ```
 west build 
 mcumgr -c acm image upload build/zephyr/app_update.bin
-mcumgr -c acm0 reset
+mcumgr -c acm1 reset
 ```
 
 After the reset, your new code should run on the nRF52.
+
+## Over CDC_ACM
+The serial communication for mcumgr goes through CDC_ACM, so you need to connect an USB to the nRF_USB port.

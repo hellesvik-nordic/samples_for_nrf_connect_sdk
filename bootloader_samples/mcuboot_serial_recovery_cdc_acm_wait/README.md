@@ -1,4 +1,4 @@
-# MCUBoot Serial Recovery Sample
+# MCUBoot Serial Recovery Sample over USB CDC with Wait For DFU
 
 ## Prepare the Developement Kit
 Disable the Mass Storage feature on the device, so that it does not interfere:
