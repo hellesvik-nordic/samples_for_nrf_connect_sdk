@@ -22,8 +22,8 @@ west flash
 To activate the Serial Recovery Mode, hold Button 1 while restarting the Developement Kit.
 Now, you should be able communicate with the bootloader using [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/zephyr/guides/device_mgmt/mcumgr.html):
 ```
-mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
-mcumgr -c acm0 image list
+mcumgr conn add acm1 type="serial" connstring="dev=/dev/ttyACM1,baud=115200,mtu=512"
+mcumgr -c acm1 image list
 ```
 The list command should print:
 ```
@@ -48,14 +48,14 @@ west build
 
 To update the Application Core:
 ```
-mcumgr -c acm image upload build/zephyr/app_update.bin
+mcumgr -c acm1 image upload build/zephyr/app_update.bin
 ```
 Reset the nRF5340 after.
 
 To update the Network Core:
 
 ```
-mcumgr -c acm image upload -n 3 build/zephyr/net_core_app_update.bin
+mcumgr -c acm1 image upload -n 3 build/zephyr/net_core_app_update.bin
 ```
 Wait 2 minutes for the image to be copied to the netcore, and reset the nRF5340 after.
 

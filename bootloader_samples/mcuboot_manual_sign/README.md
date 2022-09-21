@@ -48,6 +48,6 @@ Program the new image using [mcumgr](https://developer.nordicsemi.com/nRF_Connec
 ```
 mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
 mcumgr -c acm0 image list
-mcumgr -c acm image upload build/zephyr/app_update.bin
+mcumgr -c acm0 image upload build/zephyr/app_update.bin
 mcumgr -c acm0 image list
 ```

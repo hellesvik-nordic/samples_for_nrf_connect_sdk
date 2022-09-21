@@ -1,4 +1,4 @@
-# MCUBoot Serial Recovery Sample
+# MCUBoot Serial Recovery over UART Sample
 
 ## Prepare the Developement Kit
 Disable the Mass Storage feature on the device, so that it does not interfere:
@@ -37,7 +37,7 @@ Split status: N/A (0)
 Change something in the sample to see a difference. Build the sample again and upload the image using mcumgr:
 ```
 west build 
-mcumgr -c acm image upload build/zephyr/app_update.bin
+mcumgr -c acm0 image upload build/zephyr/app_update.bin
 mcumgr -c acm0 reset
 ```
 

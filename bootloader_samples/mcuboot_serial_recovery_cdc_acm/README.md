@@ -37,7 +37,7 @@ Split status: N/A (0)
 Change something in the sample to see a difference. Build the sample again and upload the image using mcumgr:
 ```
 west build 
-mcumgr -c acm image upload build/zephyr/app_update.bin
+mcumgr -c acm1 image upload build/zephyr/app_update.bin
 mcumgr -c acm1 reset
 ```
 
