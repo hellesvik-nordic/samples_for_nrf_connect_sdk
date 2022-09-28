@@ -1,7 +1,7 @@
-# MCUBoot SMP simple sample
+# MCUBoot SMP simple sample for nRF5340
 Disable the Mass Storage feature on the device, so that it does not interfere:
 ```
-JLinkExe -device NRF52840_XXAA -if SWD -speed 4000 -autoconnect 1 -SelectEmuBySN SEGGER_ID
+JLinkExe -device NRF5340_XXAA -if SWD -speed 4000 -autoconnect 1 -SelectEmuBySN SEGGER_ID
 J-Link>MSDDisable
 Probe configured successfully.
 J-Link>exit
