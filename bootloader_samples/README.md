@@ -18,6 +18,5 @@ If you need an Upgradable Bootloader, the Nordic Secure Immutable Bootloader (NS
 For more information on this, see [Bootloaders and Device Firmware Updates](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/app_bootloaders.html#app-bootloaders).
 
 ## SMP Server and Serial Recovery
-There are two versions of updating a device using MCUboot: SMP Server and Serial Recovery.
-
+There are two versions of updating a device using MCUboot: SMP Server and Serial Recovery.  
 Samples for these can be found in [Samples for SMP Server](smp/) and [Samples for Serial Recovery](serial_recovert/), respectivley.
