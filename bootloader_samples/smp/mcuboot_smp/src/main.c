@@ -11,5 +11,5 @@
 void main(void)
 {
     img_mgmt_register_group();
-	printk("AAA this to see it change.\n");
+	printk("Change this to see it change.\n");
 }
