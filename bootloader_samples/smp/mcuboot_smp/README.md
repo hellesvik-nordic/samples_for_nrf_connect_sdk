@@ -3,7 +3,7 @@
 ## Prepare the Debelopement Kit
 Disable the Mass Storage feature on the Interface MCU, so that it does not interfere:
 ```
-JLinkExe 
+$ JLinkExe 
 J-Link>MSDDisable
 Probe configured successfully.
 J-Link>SetHWFC Force
