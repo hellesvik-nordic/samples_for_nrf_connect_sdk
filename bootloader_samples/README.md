@@ -69,5 +69,3 @@ The format here is START\_ADDRESS: NAME (SIZE_HEX - SIZE_BYTE).
 ## Basic Bootloader Features
 Now you might think: "Okey, so a bootloader starts the application. But what is the point of that?"  
 This functionality lets us add some features to our program. The two most important features are 
-test
-
