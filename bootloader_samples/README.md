@@ -45,7 +45,7 @@ The nRF Connect SDK use the [Partition Manager](https://developer.nordicsemi.com
 ```
 west build -t partition_manager_report
 ```
-If we run this command on the smp/mcuboot\_smp sample, the output will look like this:
+If we run this command on the [Simple MCUboot SMP Server sample](smp/mcuboot_smp), the output will look like this:
 ```
 -- west build: running target partition_manager_report
   flash_primary (0x100000 - 1024kB): 
