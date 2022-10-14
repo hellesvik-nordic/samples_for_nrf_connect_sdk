@@ -45,7 +45,28 @@ The nRF Connect SDK use the [Partition Manager](https://developer.nordicsemi.com
 ```
 west build -t partition_manager_report
 ```
-If I run this command on the smp/mcuboot\_smp sample, the output will look like this:
+If we run this command on the smp/mcuboot\_smp sample, the output will look like this:
 ```
+-- west build: running target partition_manager_report
+  flash_primary (0x100000 - 1024kB): 
++-------------------------------------------------+
+| 0x0: mcuboot (0xc000 - 48kB)                    |
++---0xc000: mcuboot_primary (0x7a000 - 488kB)-----+
+| 0xc000: mcuboot_pad (0x200 - 512B)              |
++---0xc200: mcuboot_primary_app (0x79e00 - 487kB)-+
+| 0xc200: app (0x79e00 - 487kB)                   |
++-------------------------------------------------+
+| 0x86000: mcuboot_secondary (0x7a000 - 488kB)    |
++-------------------------------------------------+
 
+  sram_primary (0x40000 - 256kB): 
++--------------------------------------------+
+| 0x20000000: sram_primary (0x40000 - 256kB) |
++--------------------------------------------+
+```
+The format here is START\_ADDRESS: NAME (SIZE_HEX - SIZE_BYTE). 
+
+## Basic Bootloader Features
+Now you might think: "Okey, so a bootloader starts the application. But what is the point of that?"  
+This functionality lets us add some features to our program. The two most important features are 
 
