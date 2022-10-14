@@ -68,4 +68,11 @@ The format here is START\_ADDRESS: NAME (SIZE_HEX - SIZE_BYTE).
 
 ## Basic Bootloader Features
 Now you might think: "Okey, so a bootloader starts the application. But what is the point of that?"  
-This functionality lets us add some features to our program. The two most important features are 
+This functionality lets us add some features to our program. The two most important features are to **Validate Images** and to allow for a **Device Firmare Update (DFU)**.
+
+### Validate Image
+In bootloader lingo, a bootable part of the flash is oftern reffered to as **Image** or **Slot**. The App in the earlier figures will be an Image.  
+Most bootloaders store a expected hash-value for its image, and will calculate the hash of an image before it boots into said image.  
+This is a security feature: The bootloader will make sure that the image has not changed. In other words, no-one can insert their own code into parts of our application.
+
+### Device Firmware Update(DFU)
