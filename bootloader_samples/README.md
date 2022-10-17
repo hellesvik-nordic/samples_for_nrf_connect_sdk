@@ -1,7 +1,7 @@
 # Bootloader Samples
 These are my bootloader samples.  
 The official Bootloader sample from the nRF Connect SDK is the [SMP Server Sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/samples/subsys/mgmt/mcumgr/smp_svr/README.html). That one is properly tested.  
-For some proper theory on Bootloaders and Device Firmware Update (DFU), see the nRF Connect SDK on [Security](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html).
+For some proper theory on Bootloaders and Device Firmware Upgrade (DFU), see the nRF Connect SDK on [Security](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html).
 
 ## Quick Start
 Are you here to just get the simplest possible bootloader sample work with a nRF chip?  
@@ -10,7 +10,7 @@ Start with the [Simple MCUboot SMP sample](smp/mcuboot_smp/)
 ## NSIB vs MCUboot
 In general, the nRF Connect SDK uses MCUboot for its bootloader.  
 If you need an Upgradable Bootloader, the Nordic Secure Immutable Bootloader (NSIB) is generally used in addition to MCUboot.  
-For more information on this, see [Bootloaders and Device Firmware Updates](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/app_bootloaders.html#app-bootloaders).
+For more information on this, see [Bootloaders and Device Firmware Upgrade](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/app_bootloaders.html#app-bootloaders).
 
 ## SMP Server and Serial Recovery
 There are two versions of updating a device using MCUboot: SMP Server and Serial Recovery.  
@@ -66,13 +66,18 @@ If we run this command on the [Simple MCUboot SMP Server sample](smp/mcuboot_smp
 ```
 The format here is START\_ADDRESS: NAME (SIZE_HEX - SIZE_BYTE). 
 
+In bootloader lingo, a partitioned parts of flash that the bootloader use for applications is often reffered to as **Image** or **Slot**.  
+So in the above report, there are three main parts: The bootloader, a primary slot and a secondary slot. As such:  
+![Two Slots](../.images/two_slots.png)
+
+There is a reason for having two slots, which I will cover it in [SMP Samples](./smp).
+
 ## Basic Bootloader Features
 Now you might think: "Okey, so a bootloader starts the application. But what is the point of that?"  
-This functionality lets us add some features to our program. The two most important features are to **Validate Images** and to allow for a **Device Firmare Update (DFU)**.
+This functionality lets us add some features to our program. The two most important features are to **Validate Images** and to allow for a **Device Firmare Upgrade (DFU)**.
 
-### Validate Image
-In bootloader lingo, a bootable part of the flash is oftern reffered to as **Image** or **Slot**. The App in the earlier figures will be an Image.  
-Most bootloaders store a expected hash-value for its image, and will calculate the hash of an image before it boots into said image.  
-This is a security feature: The bootloader will make sure that the image has not changed. In other words, no-one can insert their own code into parts of our application.
+To read more about DFU, see the [SMP Samples](./smp).  
+To read more about Validation and Keys, see [Keys and Signatures Samples](./keys_and_signatures).
 
-### Device Firmware Update(DFU)
+## NSIB and MCUboot
+The nRF Connect SDK has support for two different bootloaders: Nordic Secure Immutable Bootloader and MCUboot. See [Secure Boot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/security_chapter.html#secure-boot) for more information on these.
