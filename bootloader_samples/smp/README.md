@@ -45,6 +45,8 @@ SMP has other functionality as well, such as file transfer, but I will not cover
 
 It is possible to use another nRF chip as a SMP Client. My colleague has a sample for this in his [Bluetooth: Central SMP Client DFU sample](https://github.com/simon-iversen/ncs_samples/tree/master/central_smp_client_dfu).
 
+Performing DFU over a wireless connection is known as Firmware Over The Air (FOTA).
+
 ## SMP support for MCUboot and NSIB
 MCUboot will work with SMP.
 From the [NSIB docs](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/samples/bootloader/README.html):
@@ -75,10 +77,17 @@ After the images have been swapped, the bootloader will enter the primary slot, 
 
 ![Swap Visualized](../../.images/swap.gif)  
 
-
-
 ## Two slots
 As mentioned above, the DFU Server can not overwrite its current slot, and therefore needs an extra slot.  
 However, there is another reason for needing two slots as well.  
 If you update your application with a faulty update, your SMP Server can crash. In this case, you will not be able to send a new update to the SMP Server to fix the issue.  
-But since we have two 
+As you can see in the Firmware Update figure, the previous firmware is still saved in the Secondary Slot after a DFU.  
+Because of this, if the new firmware fails, we can recover back into the previous firmware; Revert to a working state.  
+Then a new DFU can be performed with new firmware than actually works.
+
+![Revert](../../.images/revert.png)
+
+MCUboot requires that its slots are the same size.  
+The downside of havinf two bootloader slots is that they require more flash space. Here are two possible solutions to this:  
+1. Use external flash to store the secondary slot.  
+2. Use only one slot. I would not recommend this for FOTA. But you can do it without issue with [Serial Recovery](../serial_recovery).
