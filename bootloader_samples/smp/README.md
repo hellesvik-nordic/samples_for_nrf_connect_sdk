@@ -48,21 +48,21 @@ It is possible to use another nRF chip as a SMP Client. My colleague has a sampl
 Performing DFU over a wireless connection is known as Firmware Over The Air (FOTA).
 
 ## SMP support for MCUboot and NSIB
-MCUboot will work with SMP.
+MCUboot will work with SMP.  
 From the [NSIB docs](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/samples/bootloader/README.html):
 > Currently, this immutable bootloader does not support firmware updates over the SMP transport for either an upgradable bootloader or an application.  
 > If the application using this bootloader requires SMP-based firmware updates, such as Bluetooth® LE DFU, include [MCUboot as a second-stage bootloader](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/ug_bootloader_adding.html#ug-bootloader-adding-upgradable).
 
 
 ## Image header and trailer
-Before we go further, I must mention Image headers and trailers.
+Before we go further, I must mention image headers and trailers.  
 These are metadata connected to the start and/or end of an image for a firmware update.  
 ![Header and Trailer](../../.images/header_trailer.png)
 
 The metadata can contain things such as booting information, image hash and signing key.
 For NSIB, this metatada can be seen in the [struct fw_validation_info](https://github.com/nrfconnect/sdk-nrf/blob/0ea5deb771513a9ef9ced24844e180e9fe8f9a64/subsys/bootloader/bl_validation/bl_validation.c#L76-L95).  
 For MCUboot, the header and footer is documented in its documentation on [MCUboot Bootloader Design](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/design.html).  
-I write some about the verification and signing parts of the metadata in [Keys and Signatures](../keys_and_signatures).
+I cover a bit on verification and signing in [Keys and Signatures](../keys_and_signatures).
 
 
 ## Firmware update
@@ -71,7 +71,7 @@ So now we have new firmware in the Second Slot. How do we get it to the Applicat
 
 When the chip boots and enters bootloader mode, the bootloader will check metadata and its settings.  
 If the bootloader is instructed to do so, it will swap the images in the primary and secondary slots.  
-To swap the images, some method is needed to not overwrite each other. 
+To swap the images, some method is needed so that the images do not "crash".
 The figure below use a swap area, but there exist other methods for this as well. Some methods are explained in [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee).  
 After the images have been swapped, the bootloader will enter the primary slot, which now contains the new firmware.
 
@@ -88,6 +88,6 @@ Then a new DFU can be performed with new firmware than actually works.
 ![Revert](../../.images/revert.png)
 
 MCUboot requires that its slots are the same size.  
-The downside of havinf two bootloader slots is that they require more flash space. Here are two possible solutions to this:  
+The downside of having two bootloader slots is that they require more flash space. Here are two possible solutions to this:  
 1. Use external flash to store the secondary slot.  
 2. Use only one slot. I would not recommend this for FOTA. But you can do it without issue with [Serial Recovery](../serial_recovery).
