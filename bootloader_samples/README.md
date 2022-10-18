@@ -80,4 +80,5 @@ To read more about DFU, see the [SMP Samples](./smp).
 To read more about Validation and Keys, see [Keys and Signatures Samples](./keys_and_signatures).
 
 ## NSIB and MCUboot
-The nRF Connect SDK has support for two different bootloaders: Nordic Secure Immutable Bootloader and MCUboot. See [Secure Boot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/security_chapter.html#secure-boot) for more information on these.
+The nRF Connect SDK has support for two different bootloaders: Nordic Secure Immutable Bootloader and MCUboot. See [Secure Boot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/security_chapter.html#secure-boot) for more information on these.  
+This git project contains samples for both.
