@@ -67,8 +67,9 @@ I write some about the verification and signing parts of the metadata in [Keys a
 So now we have new firmware in the Second Slot. How do we get it to the Application slot?  
 ![Before Swap](../../.images/before_swap.png)
 
-
+![Detailed Swap](../../.images/detailed_swap.png)
 ![Transfer Visualized](../../.images/transfer.gif)
+![After Swap](../../.images/after_swap.png)
 
 
 
