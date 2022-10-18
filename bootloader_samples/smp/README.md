@@ -8,6 +8,7 @@ I created a minimal version of a SMP Server, with only serial communication and 
 
 # Theory
 There are some official documentation on DFU in the nRF Connect SDK under [Device Firmware Upgrade](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html#device-firmware-upgrade-dfu)
+Before reading this, I recommend having a look at the more basic theory under [Bootloader samples](../).
 
 ## What is DFU and why do we need it?
 A Device Firmware Upgrade (DFU) is when new firmware is sent to a device, updating it.  
@@ -44,3 +45,35 @@ SMP has other functionality as well, such as file transfer, but I will not cover
 
 It is possible to use another nRF chip as a SMP Client. My colleague has a sample for this in his [Bluetooth: Central SMP Client DFU sample](https://github.com/simon-iversen/ncs_samples/tree/master/central_smp_client_dfu).
 
+## SMP support for MCUboot and NSIB
+MCUboot will work with SMP.
+From the [NSIB docs](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/samples/bootloader/README.html):
+> Currently, this immutable bootloader does not support firmware updates over the SMP transport for either an upgradable bootloader or an application.  
+> If the application using this bootloader requires SMP-based firmware updates, such as Bluetooth® LE DFU, include [MCUboot as a second-stage bootloader](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/ug_bootloader_adding.html#ug-bootloader-adding-upgradable).
+
+
+## Image header and trailer
+Before we go further, I must mention Image headers and trailers.
+These are metadata connected to the start and/or end of an image for a firmware update.  
+![Header and Trailer](../../.images/header_trailer.png)
+
+The metadata can contain things such as booting information, image hash and signing key.
+For NSIB, this metatada can be seen in the [struct fw_validation_info](https://github.com/nrfconnect/sdk-nrf/blob/0ea5deb771513a9ef9ced24844e180e9fe8f9a64/subsys/bootloader/bl_validation/bl_validation.c#L76-L95).  
+For MCUboot, the header and footer is documented in its documentation on [MCUboot Bootloader Design](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/design.html).  
+I write some about the verification and signing parts of the metadata in [Keys and Signatures](../keys_and_signatures).
+
+
+## MCUboot firmware update
+So now we have new firmware in the Second Slot. How do we get it to the Application slot?  
+![Before Swap](../../.images/before_swap.png)
+
+
+![Transfer Visualized](../../.images/transfer.gif)
+
+
+
+## Two slots
+As mentioned above, the DFU Server can not overwrite its current slot, and therefore needs an extra slot.  
+However, there is another reason for needing two slots as well.  
+If you update your application with a faulty update, your SMP Server can crash. In this case, you will not be able to send a new update to the SMP Server to fix the issue.  
+But since we have two 
