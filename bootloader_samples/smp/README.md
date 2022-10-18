@@ -69,11 +69,11 @@ So now we have new firmware in the Second Slot. How do we get it to the Applicat
 
 When the chip boots and enters bootloader mode, the bootloader will check metadata and its settings.  
 If the bootloader is instructed to do so, it will swap the images in the primary and secondary slots.  
-A swap area of the flash or 
+To swap the images, some method is needed to not overwrite each other. 
+The figure below use a swap area, but there exist other methods for this as well. Some methods are explained in [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee).  
+After the images have been swapped, the bootloader will enter the primary slot, which now contains the new firmware.
 
-![Detailed Swap](../../.images/detailed_swap.png)
-![Swap Visualized](../../.images/swap.gif)
-![After Swap](../../.images/after_swap.png)
+![Swap Visualized](../../.images/swap.gif)  
 
 
 
