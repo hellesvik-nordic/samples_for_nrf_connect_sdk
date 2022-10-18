@@ -63,12 +63,16 @@ For MCUboot, the header and footer is documented in its documentation on [MCUboo
 I write some about the verification and signing parts of the metadata in [Keys and Signatures](../keys_and_signatures).
 
 
-## MCUboot firmware update
+## Firmware update
 So now we have new firmware in the Second Slot. How do we get it to the Application slot?  
 ![Before Swap](../../.images/before_swap.png)
 
+When the chip boots and enters bootloader mode, the bootloader will check metadata and its settings.  
+If the bootloader is instructed to do so, it will swap the images in the primary and secondary slots.  
+A swap area of the flash or 
+
 ![Detailed Swap](../../.images/detailed_swap.png)
-![Transfer Visualized](../../.images/transfer.gif)
+![Swap Visualized](../../.images/swap.gif)
 ![After Swap](../../.images/after_swap.png)
 
 
