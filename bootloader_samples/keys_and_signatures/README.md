@@ -11,7 +11,7 @@ This folder has samples for fixing this, and for other key/signature related use
 
 ## Frequently Asked Questions about MCUboot signing and such
 
-Q. Do I need to sign images manually using [imgtool.py](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/imgtool.html)?
+Q. Do I need to sign images manually using [imgtool.py](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/imgtool.html)?  
 A. Most likely no. Building files will automatically generate signed files for you in build/zephyr. See [Using MCUboot in nRF Connect SDK](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/readme-ncs.html).
 
 # Theory
