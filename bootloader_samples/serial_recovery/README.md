@@ -32,7 +32,7 @@ Both these are no longer relevant for Serial Recovery:
 
 ## Enter Serial Recovery Mode
 Usually the bootloader use as little time as possible to boot the application.  
-If we want to do DFU, we need some time. Here are two ways to make sure that we got time for DFU.
+If we want to do DFU, we need some time. Here are two ways to make sure that we got enough time for DFU.
 
 ### Serial Recovery on Button
 The chip will enter Serial Recovery mode instead of the application if a button is held during boot.
