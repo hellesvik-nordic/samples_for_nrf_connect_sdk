@@ -14,7 +14,7 @@ For more information on this, see [Bootloaders and Device Firmware Upgrade](http
 
 ## SMP Server and Serial Recovery
 There are two versions of updating a device using MCUboot: SMP Server and Serial Recovery.  
-Samples for these can be found in [Samples for SMP Server](smp/) and [Samples for Serial Recovery](serial_recovert/), respectivley.
+Samples for these can be found in [Samples for SMP Server](smp/) and [Samples for Serial Recovery](serial_recovery/), respectivley.
 
 # Theory
 Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
@@ -65,6 +65,8 @@ If we run this command on the [Simple MCUboot SMP Server sample](smp/mcuboot_smp
 +--------------------------------------------+
 ```
 The format here is START\_ADDRESS: NAME (SIZE_HEX - SIZE_BYTE). 
+
+You can also use the "Memory Report" functionality in VS Code to see a similar partition overview.
 
 In bootloader lingo, a partitioned parts of flash that the bootloader use for applications is often reffered to as **Image** or **Slot**.  
 So in the above report, there are three main parts: The bootloader, a primary slot and a secondary slot. As such:  
