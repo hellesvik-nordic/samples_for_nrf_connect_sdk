@@ -60,7 +60,7 @@ In addition, my collegua has written this neat [Add DFU support to your applicat
 ## Image header and trailer
 Before we go further, I must mention image headers and trailers.  
 These are metadata connected to the start and/or end of an image for a firmware update.  
-![Header and Trailer](../../.images/header_trailer.png)
+![Header and Trailer](../../.images/metadata.png)
 
 The metadata can contain things such as booting information, image hash and signing key.
 For NSIB, this metatada can be seen in the [struct fw_validation_info](https://github.com/nrfconnect/sdk-nrf/blob/0ea5deb771513a9ef9ced24844e180e9fe8f9a64/subsys/bootloader/bl_validation/bl_validation.c#L76-L95).  
@@ -75,10 +75,12 @@ So now we have new firmware in the Second Slot. How do we get it to the Applicat
 When the chip boots and enters bootloader mode, the bootloader will check metadata and its settings.  
 If the bootloader is instructed to do so, it will swap the images in the primary and secondary slots.  
 To swap the images, some method is needed so that the images do not "crash".
-The figure below use a swap area, but there exist other methods for this as well. Some methods are explained in [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee).  
+The figure below use a swap area, but there exist other methods for this as well.  
+I highly recommend watching [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee) to learn how MCUboot swaps.
 After the images have been swapped, the bootloader will enter the primary slot, which now contains the new firmware.
 
-![Swap Visualized](../../.images/swap.gif)  
+![Swap Visualized](../../.images/swap.png)  
+
 
 ## Two slots
 As mentioned above, the DFU Server can not overwrite its current slot, and therefore needs an extra slot.  
