@@ -76,7 +76,7 @@ When the chip boots and enters bootloader mode, the bootloader will check metada
 If the bootloader is instructed to do so, it will swap the images in the primary and secondary slots.  
 To swap the images, some method is needed so that the images do not "crash".
 The figure below use a swap area, but there exist other methods for this as well.  
-I highly recommend watching [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee) to learn how MCUboot swaps.
+I highly recommend watching [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee) to learn how MCUboot swaps.  
 After the images have been swapped, the bootloader will enter the primary slot, which now contains the new firmware.
 
 ![Swap Visualized](../../.images/swap.png)  
