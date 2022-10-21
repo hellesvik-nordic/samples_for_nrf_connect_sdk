@@ -77,10 +77,31 @@ If the bootloader is instructed to do so, it will swap the images in the primary
 To swap the images, some method is needed so that the images do not "crash".
 The figure below use a swap area, but there exist other methods for this as well.  
 I highly recommend watching [David Browns MCUboot youtube playlist](https://www.youtube.com/watch?v=mlGduM1W-gA&list=PLHoBLXiNitjEZFbSsz9UN69L-Z5-3oaee) to learn how MCUboot swaps.  
-After the images have been swapped, the bootloader will enter the primary slot, which now contains the new firmware.
+After the images have been swapped, the bootloader may enter the primary slot, which now contains the new firmware.
 
 ![Swap Visualized](../../.images/swap.png)  
 
+## Test or Confirm
+You may have remarked that in the previous sentence I wrote "**may** enter the primary slot".  
+This is because the bootloader do not automatically swap slots if there is new firmware in the secondary slot.  
+The bootloader will check the image metadata to see if it should swap. See [Boot Swap Types](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/design.html#boot-swap-types).  
+The image can be tagged with CONFIRM, TEST or REVERT.  
+
+If an image in the secondary slot is tagged CONFIRM, the bootloader will perform a swap on next reboot.  
+The new firmware is now permanently in the primary slot.
+
+If an image in the secondary slot is tagged TEST, the bootloader will perform a swap on next reboot.  
+After the swap, the image will be tagged REVERT.
+Unless the image is tagged CONFIRM, it will swap back to the secondary slot on next reboot.
+
+As far as I know, the image should only be tagged REVERT from the TEST case.
+
+The simplest way to tag images is by using [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/services/device_mgmt/mcumgr.html).
+```
+mcumgr -c acm0 image test <hash>
+mcumgr -c acm0 image confirm <hash>
+
+```
 
 ## Two slots
 As mentioned above, the DFU Server can not overwrite its current slot, and therefore needs an extra slot.  
@@ -96,3 +117,4 @@ MCUboot requires that its slots are the same size.
 The downside of having two bootloader slots is that they require more flash space. Here are two possible solutions to this:  
 1. Use external flash to store the secondary slot.  
 2. Use only one slot. I would not recommend this for FOTA. But you can do it without issue with [Serial Recovery](../serial_recovery).
+
