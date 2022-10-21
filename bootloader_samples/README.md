@@ -3,6 +3,16 @@ These are my bootloader samples.
 The official Bootloader sample from the nRF Connect SDK is the [SMP Server Sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/samples/subsys/mgmt/mcumgr/smp_svr/README.html). That one is properly tested.  
 For some proper theory on Bootloaders and Device Firmware Upgrade (DFU), see the nRF Connect SDK on [Security](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html).
 
+## Requirements
+Most of the samples here use [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/services/device_mgmt/mcumgr.html) to perform DFU. I recommend that you install it before starting.  
+Find which serial connection the Developement Kit is connected to. This sample assumes /dev/ttyACM0.  
+```
+mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
+mcumgr -c acm0 image list
+mcumgr -c acm0 image upload build/zephyr/app_update.bin
+mcumgr -c acm0 image list
+```
+
 ## Quick Start
 Are you here to just get the simplest possible bootloader sample work with a nRF chip?  
 Start with the [Simple MCUboot SMP sample](smp/mcuboot_smp/)
