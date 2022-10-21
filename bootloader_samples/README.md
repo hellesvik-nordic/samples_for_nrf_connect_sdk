@@ -84,3 +84,17 @@ To read more about Validation and Keys, see [Keys and Signatures Samples](./keys
 ## NSIB and MCUboot
 The nRF Connect SDK has support for two different bootloaders: Nordic Secure Immutable Bootloader and MCUboot. See [Secure Boot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/security_chapter.html#secure-boot) for more information on these.  
 This git project contains samples for both.
+
+## How to configure the bootloader?
+As you already know, you can configure your project by using prj.conf.  
+When you use a bootloader, it is added to your project as a [child image](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/ug_multi_image.html).  
+MCUboot has a child image named "mcuboot" and NSIB has a child image named "b0".
+The configurations of a child image is separate from the configurations of the application.  
+So you can not configure the bootloader by changing prj.conf.  
+To overlay child image configurations, see [Image Specific Variables](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/ug_multi_image.html#image-specific-variables).  
+But for simplicity, you do it by creating a child\_image folder in your project. Then create for example "child\_image/mcuboot.conf" to configure mcuboot.  
+These files can be seen in various samples in this git.
+
+## Should I change the source code for MCUboot or NSIB?
+If you can avoid it, you should not.  
+But if you need to change them for specific needs, I think the simplest solution will be to create a git fork of the bootloader and change nrf/west.yml to point the nRF Connect SDK to your bootloader.
