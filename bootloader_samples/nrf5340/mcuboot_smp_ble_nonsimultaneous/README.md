@@ -30,13 +30,25 @@ west build
 Program the new image using [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/guides/device_mgmt/mcumgr.html):
 Find which serial connection the Developement Kit is connected to. This sample assumes /dev/ttyACM1.
 
+### Update application core
 ```
 mcumgr conn add acm1 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
 mcumgr -c acm1 image list
 mcumgr -c acm1 image upload build/zephyr/app_update.bin
 mcumgr -c acm1 image list
 ```
-If you rather want to update the network core, switch app\_update.bin with net\_core\_app\_update.bin.  
+Then tell MCUBoot to boot from the new slot next reboot:
+```
+mcumgr -c acm1 image confirm <SLOT1_HASH>
+```
+
+### Update application core
+```
+mcumgr conn add acm1 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
+mcumgr -c acm1 image list
+mcumgr -c acm1 image upload build/zephyr/net_core_app_update.bin
+mcumgr -c acm1 image list
+```
 Then tell MCUBoot to boot from the new slot next reboot:
 ```
 mcumgr -c acm1 image confirm <SLOT1_HASH>
