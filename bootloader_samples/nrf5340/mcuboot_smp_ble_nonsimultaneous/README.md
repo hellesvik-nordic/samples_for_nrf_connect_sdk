@@ -42,7 +42,7 @@ Then tell MCUBoot to boot from the new slot next reboot:
 mcumgr -c acm1 image confirm <SLOT1_HASH>
 ```
 
-### Update application core
+### Update network core
 ```
 mcumgr conn add acm1 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
 mcumgr -c acm1 image list
