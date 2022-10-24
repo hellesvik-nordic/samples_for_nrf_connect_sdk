@@ -17,7 +17,7 @@ Rebuild:
 west build
 ```
 
-##DFU over Bluetooth Low Energy
+## DFU over Bluetooth Low Energy
 Install the [nRF Connect for Mobile app](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-mobile) on a mobile phone.
 
 Move build/zephyr/[dfu\_application.zip](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/app_build_system.html#output-build-files) to your mobile phone.

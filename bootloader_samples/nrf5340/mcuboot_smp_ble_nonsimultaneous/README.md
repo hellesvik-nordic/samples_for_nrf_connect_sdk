@@ -1,4 +1,4 @@
-# MCUboot SMP Sample feat Bluetooth Low Enery
+# MCUboot SMP Sample feat Bluetooth Low Energy
 Code to make this work comes from the official [Zephyr SMP Server Sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/samples/subsys/mgmt/mcumgr/smp_svr/README.html).
 
 ## Prepare the Debelopement Kit
@@ -47,7 +47,7 @@ Lastly, reset the Developement Kit:
 nrfjprog --reset
 ```
 
-##DFU over Bluetooth Low Energy
+## DFU over Bluetooth Low Energy
 
 Install the [nRF Connect for Mobile app](https://www.nordicsemi.com/Products/Development-tools/nrf-connect-for-mobile) on a mobile phone.
 
