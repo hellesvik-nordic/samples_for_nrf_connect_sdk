@@ -8,9 +8,6 @@ Most of the samples here use [mcumgr](https://developer.nordicsemi.com/nRF_Conne
 Find which serial connection the Developement Kit is connected to. This sample assumes /dev/ttyACM0.  
 ```
 mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
-mcumgr -c acm0 image list
-mcumgr -c acm0 image upload build/zephyr/app_update.bin
-mcumgr -c acm0 image list
 ```
 
 ## Quick Start
