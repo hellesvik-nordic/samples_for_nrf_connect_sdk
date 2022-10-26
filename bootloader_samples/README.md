@@ -27,6 +27,15 @@ Samples for these can be found in [Samples for SMP Server](smp/) and [Samples fo
 Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
 I will cover some of the basics very briefly. I recommend reading more up on these on The Internet.
 
+## Why do a bootloader?
+The two main reasons for having a bootloaders are:
+
+** 1. To verify that the firmware running on the microcontroller is yours and have not changed. **
+
+** 2. To update the microcontroller in the field. **
+
+![usecases](../.images/overview_dfu.png)  
+
 ## Memory
 nRF microcontroller has two kinds of storage:  
 **RAM**: Volatile memory. This is deleted on each reset.  
