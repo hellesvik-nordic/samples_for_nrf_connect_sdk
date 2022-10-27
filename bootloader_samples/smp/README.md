@@ -7,6 +7,7 @@ I created a minimal version of a SMP Server, with only serial communication and 
 If you want to add Bluetooth functionality to the SMP Server, see the [Zephyr SMP Server sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/samples/subsys/mgmt/mcumgr/smp_svr/README.html) or my colleguas [Add DFU support to your application guide](https://devzone.nordicsemi.com/guides/nrf-connect-sdk-guides/b/software/posts/ncs-dfu).
 
 # Theory
+Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
 There are some official documentation on DFU in the nRF Connect SDK under [Device Firmware Upgrade](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html#device-firmware-upgrade-dfu)
 Before reading this, I recommend having a look at the more basic theory under [Bootloader samples](../).
 

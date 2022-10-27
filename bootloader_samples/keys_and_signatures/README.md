@@ -18,6 +18,7 @@ A. Most likely no. Building projects will automatically generate signed files fo
 
 
 # Theory
+Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
 MCUboot has some detailed documentation on how it is built, including security features at [MCUboot docs](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/mcuboot/wrapper.html).
 The nRF Connect SDK also has some information about bootloaders and security at [Secure Boot](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/nrf/security_chapter.html#secure-boot).
 Before reading further, I recommend having a look at the more basic theory under [Bootloader samples](../).

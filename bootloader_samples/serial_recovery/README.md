@@ -4,6 +4,7 @@ This mode is usually activated if a pin is held high at boot, but the mode can a
 This git have samples for serial recovery over both UART and USB(cdc_acm).
 
 # Theory 
+Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
 Before reading this, I recommend having a look at the more basic theory under [Bootloader samples](../) and the DFU theoru under [SMP samples](../smp).
 
 ## Serial Recovery

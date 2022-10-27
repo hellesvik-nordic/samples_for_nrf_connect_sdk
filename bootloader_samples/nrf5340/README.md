@@ -1,6 +1,7 @@
 # nRF5340 samples
 
 # Theory
+Disclaimer: This is unofficial, and just my understanding on how things works. I can be wrong.  
 
 ## Do I need to actually know the inner workings of the nRF5340 to do Firmware Update on it?
 No, not really.  
