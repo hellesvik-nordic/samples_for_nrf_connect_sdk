@@ -51,3 +51,7 @@ mcumgr -c acm0 image list
 mcumgr -c acm0 image upload build/zephyr/app_update.bin
 mcumgr -c acm0 image list
 ```
+Then tell MCUBoot to boot from the new slot next reboot:
+```
+mcumgr -c acm0 image test <SLOT1_HASH>
+```
