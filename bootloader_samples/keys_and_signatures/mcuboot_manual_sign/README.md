@@ -35,6 +35,7 @@ $NRF_CONNECT_PATH/bootloader/mcuboot/scripts/imgtool.py sign --header-size 0x200
 $NRF_CONNECT_PATH/bootloader/mcuboot/scripts/imgtool.py sign --header-size 0x200 --align 4 --slot-size 0x79e00 --version 1.0.0 --pad-header --key keys/test_priv.pem build/zephyr/zephyr.hex app_manually_signed.hex
 ```
 DISCLAIMER: You should make sure the arguments for this signing command are right for your application. See the [imgtool.py documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
+You can see the command used to sign app_update.bin and other generated binaries by using "west -vvv build ...".
 
 First time, you need to use nrfjprog to program your application. You can not use mcumgr, as the application must run to have SMP Server active. 
 An alternative could be to use serial recovery mode instead.
