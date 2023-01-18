@@ -62,6 +62,6 @@ The -n numbers are set as follows:
 ```
 slot 0 - image 0 primary
 slot 1 - image 0 secondary
-slot 2 - image 1 primary
-slot 3 - image 1 secondary ("Virtual" slot)
+slot 2 - image 1 primary ("Virtual" slot)
+slot 3 - image 1 secondary
 ```
