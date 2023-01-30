@@ -31,6 +31,7 @@ void main(void)
     }
 
     printk("Entering forever loop.\n");
+    printk("Disclaimer: This example does not lock netcore, and can be unlocked by recovering netcore!\n See README for more information.\n");
     while(1){
         k_sleep(K_SECONDS(1));
     }

@@ -1,6 +1,16 @@
 # ERASEPROTECT SAMPLE
 **DISCLAIMER: If you enable both APPROTECT and ERASEPROTECT at the same time without setting the internal ERASEPROTECT.DISABLE register in firmware, you will no longer be able to program the nRF5340! It will be Bricked!**
 
+# Error
+This sample do only work for the application core.
+The eraseprotect in this sample can be undone by recovering the network core.
+I have not added a fix for this yet.
+If you want me to speed up on the fix, create an issue# Error
+This sample do only work for the application core.
+The eraseprotect in this sample can be undone by recovering the network core.
+I have not added a fix for this yet.
+If you want me to speed up on the fix, create an issue.
+
 ## Versions
 - nRF Connect SDK: v2.0.1
 - nRF5340DK
