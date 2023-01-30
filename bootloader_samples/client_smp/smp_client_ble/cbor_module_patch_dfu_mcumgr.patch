@@ -1,0 +1,23 @@
+diff --git a/src/zcbor_decode.c b/src/zcbor_decode.c
+index 09c3aa4..ece1466 100644
+--- a/src/zcbor_decode.c
++++ b/src/zcbor_decode.c
+@@ -624,7 +624,8 @@ static bool primx_expect(zcbor_state_t *state, uint8_t result)
+ 	}
+ 
+ 	if (value != result) {
+-		ERNG_R_RESTORE(ZCBOR_ERR_WROVALUE);
++		return false;
++		//ERR_RESTORE(ZCBOR_ERR_WRONG_VALUE);
+ 	}
+ 	return true;
+ }
+@@ -666,7 +667,7 @@ bool zcbor_bool_decode(zcbor_state_t *state, bool *result)
+ bool zcbor_bool_expect(zcbor_state_t *state, bool result)
+ {
+ 	if (!primx_expect(state, (uint8_t)(!!result) + ZCBOR_BOOL_TO_PRIM)) {
+-		ZCBOR_FAIL();
++		return false;
+ 	}
+ 	return true;
+ }
