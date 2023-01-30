@@ -30,6 +30,7 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/flash.h>
 
+#include "img_mgmt/img_mgmt.h"
 #include <pm_config.h>
 
 /* Mimimal number of ZCBOR encoder states to provide full encoder functionality. */
@@ -1196,6 +1197,8 @@ void main(void)
 
 
 	printk("Starting Bluetooth Central SMP Client example\n");
+
+    img_mgmt_register_group();
 
 	k_work_init(&upload_work_item, send_upload2);
 
