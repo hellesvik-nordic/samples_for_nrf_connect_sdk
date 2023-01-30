@@ -1,7 +1,0 @@
-custom_storage:
-  address: 0x50000
-  placement:
-    before:
-    - end
-  region: flash_primary
-  size: 0xB0000

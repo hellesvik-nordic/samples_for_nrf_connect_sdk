@@ -30,6 +30,8 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/flash.h>
 
+#include <pm_config.h>
+
 /* Mimimal number of ZCBOR encoder states to provide full encoder functionality. */
 #define CBOR_ENCODER_STATE_NUM 2
 
@@ -846,10 +848,9 @@ void send_upload2(struct k_work *item)
 	uint8_t data[UPLOAD_CHUNK+1]; // One more byte, to store '/0'
 
 	flash_dev = device_get_binding("NRF_FLASH_DRV_NAME");
-	//TODO: Find some smarter ways to get these
-	int last_addr = 0x86500; //FBB66
-	int start_addr = 0x50000;
-	int curr_addr = 0x50000;
+	int last_addr = PM_MCUBOOT_SECONDARY_END_ADDRESS; 
+	int start_addr = PM_MCUBOOT_SECONDARY_ADDRESS;
+	int curr_addr = start_addr;
 	int upload_chunk = UPLOAD_CHUNK;
 	int err;
 	bool update_complete = false;
@@ -864,7 +865,6 @@ void send_upload2(struct k_work *item)
 			upload_chunk = last_addr - curr_addr;
 			update_complete = true;
 		}
-		printk("AAA: ")
 		progress_print(curr_addr-start_addr, last_addr-start_addr);
 		err = flash_read(flash_dev, curr_addr, data, upload_chunk);
 		if (err != 0) {
