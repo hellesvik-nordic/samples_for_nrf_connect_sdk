@@ -13,6 +13,6 @@ mcumgr -c acm1 image upload build/zephyr/net_core_app_update.bin
 ```
 
 ## DFU over Bluetooth Low Energy
-See [MCUboot SMP Sample feat Bluetooth Low Energy sample](../../smp(mcuboot_smp_ble). 
+See [MCUboot SMP Sample feat Bluetooth Low Energy sample](../../smp/mcuboot_smp_ble). 
 As above, use app\_update.bin for the application core, and net\_core\_app\_update.bin for the network core.
 
