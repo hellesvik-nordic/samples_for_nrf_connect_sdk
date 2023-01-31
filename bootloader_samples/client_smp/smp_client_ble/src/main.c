@@ -848,7 +848,7 @@ void send_upload2(struct k_work *item)
 	const struct device *flash_dev;
 	uint8_t data[UPLOAD_CHUNK+1]; // One more byte, to store '/0'
 
-	flash_dev = device_get_binding("NRF_FLASH_DRV_NAME");
+    flash_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_flash_controller));
 	int last_addr = PM_MCUBOOT_SECONDARY_END_ADDRESS; 
 	int start_addr = PM_MCUBOOT_SECONDARY_ADDRESS;
 	int curr_addr = start_addr;
