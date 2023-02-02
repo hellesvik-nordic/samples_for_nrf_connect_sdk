@@ -964,10 +964,10 @@ static int send_smp_reset(struct bt_dfu_smp *dfu_smp,
 	payload_len = (size_t)(zse->payload - smp_cmd.payload);
 
 	smp_cmd.header.op = 2; /* Write */
-	smp_cmd.header.flags = 0;
-	smp_cmd.header.len_h8 = 0;
-	smp_cmd.header.len_l8 = 0;
-	smp_cmd.header.group_h8 = 0;
+    smp_cmd.header.flags = 0;
+    smp_cmd.header.len_h8 = (uint8_t)((payload_len >> 8) & 0xFF);
+    smp_cmd.header.len_l8 = (uint8_t)((payload_len >> 0) & 0xFF);
+    smp_cmd.header.group_h8 = 0;
 	smp_cmd.header.group_l8 = 0; /* OS */
 	smp_cmd.header.seq = 0;
 	smp_cmd.header.id  = 5; /* RESET */
