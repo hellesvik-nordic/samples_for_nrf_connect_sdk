@@ -1271,46 +1271,119 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
     printk("nb_hdr.nh_op: %d\n",nb_hdr.nh_op);
     printk("nb_hdr.nh_id: %d\n",nb_hdr.nh_id);
 
+	/* Skip the mgmt_hdr */
+	nb = net_buf_pull(nb, sizeof(struct mgmt_hdr));
+
+    zcbor_state_t zsd[CBOR_DECODER_STATE_NUM];
+    struct zcbor_string value = {0};
+    char map_key[SMP_ECHO_MAP_KEY_MAX_LEN];
+    char map_value[SMP_ECHO_MAP_VALUE_MAX_LEN];
+    bool ok;
+    uint8_t counter = 0;
+
+    zcbor_new_decode_state(zsd, ARRAY_SIZE(zsd), nb->data, nb->len, 1);
+    printk("AAAA: %d\n",counter++);
+
+    /* Stop decoding on the error. */
+    zsd->constant_state->stop_on_error = true;
+    printk("AAAA: %d\n",counter++);
+
+    zcbor_map_start_decode(zsd);
+    printk("AAAA: %d\n",counter++);
+
+    ok = zcbor_tstr_decode(zsd, &value);
+    printk("AAAA: %d\n",counter++);
+
+    if (!ok) {
+        printk("Decoding error (err: %d)\n", zcbor_pop_error(zsd));
+        return;
+    } else if ((value.len != 1) || (*value.value != 'r')) {
+        printk("Invalid data received.\n");
+        return;
+    } else {
+        /* Do nothing */
+    }
+    printk("AAAA: %d\n",counter++);
+
+    map_key[0] = value.value[0];
+    printk("AAAA: %d\n",counter++);
+
+    /* Add string NULL terminator */
+    map_key[1] = '\0';
+    printk("AAAA: %d\n",counter++);
+
+    ok = zcbor_tstr_decode(zsd, &value);
+    printk("AAAA: %d\n",counter++);
+
+    if (!ok) {
+        printk("Decoding error (err: %d)\n", zcbor_pop_error(zsd));
+        return;
+    } else if (value.len > (sizeof(map_value) - 1)) {
+        printk("To small buffer for received data.\n");
+        return;
+    } else {
+        /* Do nothing */
+    }
+    printk("AAAA: %d\n",counter++);
+
+    memcpy(map_value, value.value, value.len);
+    printk("AAAA: %d\n",counter++);
+
+    /* Add string NULL terminator */
+    map_value[value.len] = '\0';
+    printk("AAAA: %d\n",counter++);
+
+    zcbor_map_end_decode(zsd);
+    printk("AAAA: %d\n",counter++);
+
+    if (zcbor_check_error(zsd)) {
+        /* Print textual representation of the received CBOR map. */
+        printk("{_\"%s\": \"%s\"}\n", map_key, map_value);
+    } else {
+        printk("Cannot print received CBOR stream (err: %d)\n",
+                zcbor_pop_error(zsd));
+    }
+
     printk("Test end\n");
 }
 
 
 void main(void)
 {
-	int err;
+    int err;
 
 
-	printk("Starting Bluetooth Central SMP Client example\n");
+    printk("Starting Bluetooth Central SMP Client example\n");
 
     img_mgmt_register_group();
 
-	k_work_init(&upload_work_item, send_upload2);
+    k_work_init(&upload_work_item, send_upload2);
 
-	bt_dfu_smp_init(&dfu_smp, &init_params);
+    bt_dfu_smp_init(&dfu_smp, &init_params);
 
-	err = bt_enable(NULL);
-	if (err) {
-		printk("Bluetooth init failed (err %d)\n", err);
-		return;
-	}
+    err = bt_enable(NULL);
+    if (err) {
+        printk("Bluetooth init failed (err %d)\n", err);
+        return;
+    }
 
-	printk("Bluetooth initialized\n");
+    printk("Bluetooth initialized\n");
 
-	scan_init();
+    scan_init();
 
-	err = dk_buttons_init(button_handler);
-	if (err) {
-		printk("Failed to initialize buttons (err %d)\n", err);
-		return;
-	}
+    err = dk_buttons_init(button_handler);
+    if (err) {
+        printk("Failed to initialize buttons (err %d)\n", err);
+        return;
+    }
 
-	err = bt_scan_start(BT_SCAN_TYPE_SCAN_ACTIVE);
-	if (err) {
-		printk("Scanning failed to start (err %d)\n", err);
-		return;
-	}
+    err = bt_scan_start(BT_SCAN_TYPE_SCAN_ACTIVE);
+    if (err) {
+        printk("Scanning failed to start (err %d)\n", err);
+        return;
+    }
 
     uart_mcumgr_register(smp_uart_process_frag);
 
-	printk("Scanning successfully started\n");
+    printk("Scanning successfully started\n");
 }
