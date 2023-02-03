@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
 THE FOLLOWING PROJECT IS NOT FINISHED AND WILL LIKELY NOT WORK
 
-# Bluetooth: Central SMP Client DFU
+# SMP Client over UART
 This example is copied from https://github.com/simon-iversen/ncs\_samples/tree/master/central\_smp\_client\_dfu.
 I also have changed it some.
 
