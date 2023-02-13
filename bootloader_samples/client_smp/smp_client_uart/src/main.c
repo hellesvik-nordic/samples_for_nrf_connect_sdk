@@ -76,6 +76,11 @@ static char hash_value_primary_slot[33];
 static const struct device *const uart_mcumgr_dev =
 	DEVICE_DT_GET(DT_CHOSEN(zephyr_uart_mcumgr));
 
+static void smp_uart_process_rx_queue(struct k_work *work);
+
+K_FIFO_DEFINE(smp_uart_rx_fifo_custom);
+K_WORK_DEFINE(smp_uart_work_custom, smp_uart_process_rx_queue);
+
 
 static int uart_mcumgr_send_raw(const void *data, int len)
 {
@@ -1580,6 +1585,25 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
 
 }
 
+static void smp_uart_process_rx_queue(struct k_work *work)
+{
+	struct uart_mcumgr_rx_buf *rx_buf;
+
+	while ((rx_buf = k_fifo_get(&smp_uart_rx_fifo_custom, K_NO_WAIT)) != NULL) {
+		smp_uart_process_frag(rx_buf);
+	}
+}
+
+/**
+ * Enqueues a received SMP fragment for later processing.  This function
+ * executes in the interrupt context.
+ */
+static void smp_uart_rx_frag(struct uart_mcumgr_rx_buf *rx_buf)
+{
+	k_fifo_put(&smp_uart_rx_fifo_custom, rx_buf);
+	k_work_submit(&smp_uart_work_custom);
+}
+
 
 void main(void)
 {
@@ -1589,6 +1613,8 @@ void main(void)
     printk("Starting Bluetooth Central SMP Client example\n");
 
     img_mgmt_register_group();
+
+	uart_mcumgr_register(smp_uart_rx_frag);
 
     k_work_init(&upload_work_item, send_upload2);
 
@@ -1616,7 +1642,7 @@ void main(void)
         return;
     }
 
-    uart_mcumgr_register(smp_uart_process_frag);
+    uart_mcumgr_register(smp_uart_rx_frag);
 
     printk("Scanning successfully started\n");
 }
