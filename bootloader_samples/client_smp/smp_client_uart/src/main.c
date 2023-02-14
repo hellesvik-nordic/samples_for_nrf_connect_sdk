@@ -1255,7 +1255,7 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
 	nb = mcumgr_serial_process_frag(&smp_uart_rx_ctxt,
 					rx_buf->data, rx_buf->length);
 
-    printk("rx_buf->length: %d\n",rx_buf->length);
+    //printk("rx_buf->length: %d\n",rx_buf->length);
     printk("nb->length: %d\n",nb->len);
 	/* Release the encoded fragment. */
 	uart_mcumgr_free_rx_buf(rx_buf);
@@ -1303,11 +1303,39 @@ void  smp_handler(struct net_buf *nb){
     if(rc !=0){
         printk("Error reading net_buf header\n");
     }
+    nb_hdr.nh_group >>= 8; 
     printk("nb_hdr.nh_op: %d\n",nb_hdr.nh_op);
-    printk("nb_hdr.nh_group: %d\n",nb_hdr.nh_group>>8);
+    printk("nb_hdr.nh_group: %d\n",nb_hdr.nh_group);
     printk("nb_hdr.nh_id: %d\n",nb_hdr.nh_id);
 
-    smp_list_handler(nb);
+    if( nb_hdr.nh_op != SMP_OP_READ_RSP && nb_hdr.nh_op != SMP_OP_WRITE_RSP ){
+        printk("Error: Expected SMP Response.\n");
+        return;
+    }
+
+    if(nb_hdr.nh_group == SMP_GROUP_OS) {
+        printk("SMP OS handler not implemented yet\n");
+    }
+    else if(nb_hdr.nh_group == SMP_GROUP_IMG) {
+        switch(nb_hdr.nh_id){
+            case SMP_ID_IMG_STATE:
+                smp_list_handler(nb);
+                break;
+            case SMP_ID_IMG_UPLOAD:
+                printk("SMP img upload handler not implemented yet.\n");
+                break;
+            case SMP_ID_IMG_ERASE:
+                printk("SMP img erase handler not implemented yet.\n");
+                break;
+            default:
+                printk("Error: Unexpected SMP ID.\n");
+        }
+    }
+    else {
+        printk("Error: Unexpected SMP Group.\n");
+    }
+
+    return;
 
 }
 
@@ -1324,7 +1352,7 @@ void smp_list_handler(struct net_buf * nb)
     bool ok;
     uint8_t counter = 0;
 
-    printk("nb->len: %d\n",nb->len);
+    //printk("nb->len: %d\n",nb->len);
 
     zcbor_new_decode_state(zsd, ARRAY_SIZE(zsd), new_ptr, nb->len, 1);
 
