@@ -1268,6 +1268,7 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
 	} 
 
     smp_handler(nb);
+    smp_packet_free(nb);
     return;
 }
 
