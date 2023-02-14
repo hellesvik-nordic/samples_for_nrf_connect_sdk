@@ -1262,13 +1262,39 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
 
 	/* Check if complete package has been received
 	 */
-	if (nb != NULL) {
-        printk("AIAIAI\n");
-
-	} else {
-        printk("Not enough space for network buffer\n");
+	if (nb == NULL) {
+        printk("Waiting for more fragments\n");
         return;
-    }
+	} 
+
+    smp_handler(nb);
+    return;
+}
+
+#define SMP_OP_READ_REQ     0
+#define SMP_OP_READ_RSP     1
+#define SMP_OP_WRITE_REQ    2
+#define SMP_OP_WRITE_RSP    3
+
+#define SMP_GROUP_OS        0
+#define SMP_GROUP_IMG       1
+#define SMP_GROUP_STAT      2
+#define SMP_GROUP_FILE      8
+#define SMP_GROUP_SHELL     9
+
+#define SMP_ID_OS_ECHO      0
+#define SMP_ID_OS_STAT      2
+#define SMP_ID_OS_MEM_STAT  3
+#define SMP_ID_OS_RESET     4
+#define SMP_ID_OS_PARAMS    5
+#define SMP_ID_OS_INFO      6
+
+#define SMP_ID_IMG_STATE    0 
+#define SMP_ID_IMG_UPLOAD   1
+#define SMP_ID_IMG_ERASE    2
+
+
+void  smp_handler(struct net_buf *nb){
 
     uint8_t rc = 0;
     struct mgmt_hdr nb_hdr;
@@ -1278,7 +1304,15 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
         printk("Error reading net_buf header\n");
     }
     printk("nb_hdr.nh_op: %d\n",nb_hdr.nh_op);
+    printk("nb_hdr.nh_group: %d\n",nb_hdr.nh_group>>8);
     printk("nb_hdr.nh_id: %d\n",nb_hdr.nh_id);
+
+    smp_list_handler(nb);
+
+}
+
+void smp_list_handler(struct net_buf * nb)
+{
 
 	/* Skip the mgmt_hdr */
 	void *new_ptr = net_buf_pull(nb, sizeof(struct mgmt_hdr));
