@@ -1,7 +1,7 @@
 # WORK IN PROGRESS
 THE FOLLOWING PROJECT IS NOT FINISHED AND WILL LIKELY NOT WORK
 
-##Disclaimer
+## Disclaimer
 This code/configuration is not thoroughly tested or qualified and should be considered provided “as-is”. Please test it with your application and let me know if you find any issues.
 
 # SMP Client over UART
