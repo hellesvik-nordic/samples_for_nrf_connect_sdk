@@ -30,7 +30,9 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/flash.h>
 
+#include "mgmt/mgmt.h"
 #include "img_mgmt/img_mgmt.h"
+
 #include <pm_config.h>
 
 #include <zephyr/mgmt/mcumgr/serial.h>
@@ -852,9 +854,6 @@ void send_upload2(struct k_work *item)
 {
    	zcbor_state_t zse[2];
 	size_t payload_len;
-	
-
-	
 
 	const struct device *flash_dev;
 	uint8_t data[UPLOAD_CHUNK+1]; // One more byte, to store '/0'
@@ -928,8 +927,36 @@ void send_upload2(struct k_work *item)
 	}
 }
 
+//static struct mgmt_hdr bt_dfu_smp_to_mgmt_hdr(struct bt_dfu
+
 static int send_smp_list(struct bt_dfu_smp *dfu_smp)
 {
+    
+    /* struct mgmt_hdr image_list_header; */
+	/* image_list_header.nh_op = 0; #<{(| read request |)}># */
+	/* image_list_header.nh_flags = 0; */
+	/* image_list_header.nh_len = 0; */
+	/* image_list_header.nh_group = 1; #<{(| IMAGE |)}># */
+	/* image_list_header.nh_seq = 0; */
+	/* image_list_header.nh_id  = 0; #<{(| LIST |)}># */
+    /*  */
+    /* mgmt_hton_hdr(&image_list_header); */
+    /*  */
+    /*  */
+    /* struct net_buf *nb; */
+    /* nb = smp_packet_alloc(); */
+    /*  */
+	/* zcbor_state_t zs[CBOR_ENCODER_STATE_NUM]; */
+    /* zcbor_new_encode_state(zs, 2, nb->data + sizeof(struct mgmt_hdr), net_buf_tailroom(nb), 0); */
+    /*  */
+    /* nb->len = sizeof(struct mgmt_hdr); */
+    /* memcpy(nb->data, &image_list_header, sizeof(image_list_header)); */
+
+    /* zcbor_list_start_encode(zs,0); */
+    /* zcbor_list_end_encode(zs,0); */
+    /* return uart_mcumgr_send(smp_cmd, sizeof(struct mgmt_hdr)); */
+
+
 	static struct smp_buffer smp_cmd;
 	zcbor_state_t zse[CBOR_ENCODER_STATE_NUM];
 	size_t payload_len;
@@ -943,6 +970,7 @@ static int send_smp_list(struct bt_dfu_smp *dfu_smp)
 	smp_cmd.header.group_l8 = 1; /* IMAGE */
 	smp_cmd.header.seq = 0;
 	smp_cmd.header.id  = 0; /* LIST */
+
 
     return uart_mcumgr_send(&smp_cmd, sizeof(smp_cmd.header));
 
@@ -1260,7 +1288,8 @@ void smp_handler(struct net_buf *nb){
     if(rc !=0){
         printk("Error reading net_buf header\n");
     }
-    nb_hdr.nh_group >>= 8; 
+    mgmt_ntoh_hdr(&nb_hdr);
+    //nb_hdr.nh_group >>= 8;
     printk("nb_hdr.nh_op: %d\n",nb_hdr.nh_op);
     printk("nb_hdr.nh_group: %d\n",nb_hdr.nh_group);
     printk("nb_hdr.nh_id: %d\n",nb_hdr.nh_id);
