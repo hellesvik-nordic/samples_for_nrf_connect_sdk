@@ -34,7 +34,7 @@
 #include <pm_config.h>
 
 #include <zephyr/mgmt/mcumgr/serial.h>
-#include <zephyr/drivers/uart.h>
+#include <zephyr/drivers/console/uart_mcumgr.h>
 
 /* Mimimal number of ZCBOR encoder states to provide full encoder functionality. */
 #define CBOR_ENCODER_STATE_NUM 2
@@ -81,19 +81,6 @@ static void smp_uart_process_rx_queue(struct k_work *work);
 K_FIFO_DEFINE(smp_uart_rx_fifo_custom);
 K_WORK_DEFINE(smp_uart_work_custom, smp_uart_process_rx_queue);
 
-
-static int uart_mcumgr_send_raw(const void *data, int len)
-{
-
-	const uint8_t *u8p;
-
-	u8p = data;
-	while (len--) {
-		uart_poll_out(uart_mcumgr_dev, *u8p++);
-	}
-
-	return 0;
-}
 
 static void scan_filter_match(struct bt_scan_device_info *device_info,
 			      struct bt_scan_filter_match *filter_match,
@@ -957,7 +944,7 @@ static int send_smp_list(struct bt_dfu_smp *dfu_smp)
 	smp_cmd.header.seq = 0;
 	smp_cmd.header.id  = 0; /* LIST */
 
-    return mcumgr_serial_tx_pkt(&smp_cmd, sizeof(smp_cmd.header), uart_mcumgr_send_raw);
+    return uart_mcumgr_send(&smp_cmd, sizeof(smp_cmd.header));
 
 	//return bt_dfu_smp_command(dfu_smp, smp_list_rsp_proc,
 				  //sizeof(smp_cmd.header),
@@ -1127,7 +1114,7 @@ static int send_smp_echo(struct bt_dfu_smp *dfu_smp,
 
 
 
-    return mcumgr_serial_tx_pkt(&smp_cmd, sizeof(smp_cmd.header) + payload_len, uart_mcumgr_send_raw);
+    return uart_mcumgr_send(&smp_cmd, sizeof(smp_cmd.header) + payload_len);
 
 	/* return bt_dfu_smp_command(dfu_smp, smp_echo_rsp_proc, */
 	/* 			  sizeof(smp_cmd.header) + payload_len, */
@@ -1222,13 +1209,6 @@ static void button_handler(uint32_t button_state, uint32_t has_changed)
 	//No more buttons for reset
 }
 
-struct uart_mcumgr_rx_buf {
-	void *fifo_reserved;   /* 1st word reserved for use by fifo */
-	uint8_t data[CONFIG_UART_MCUMGR_RX_BUF_SIZE];
-	int length;
-};
-
-
 static struct mcumgr_serial_rx_ctxt smp_uart_rx_ctxt;
 
 static int
@@ -1256,46 +1236,22 @@ static void smp_uart_process_frag(struct uart_mcumgr_rx_buf *rx_buf)
 					rx_buf->data, rx_buf->length);
 
     //printk("rx_buf->length: %d\n",rx_buf->length);
-    printk("nb->length: %d\n",nb->len);
+    //printk("nb->length: %d\n",nb->len);
 	/* Release the encoded fragment. */
 	uart_mcumgr_free_rx_buf(rx_buf);
 
 	/* Check if complete package has been received
 	 */
 	if (nb == NULL) {
-        printk("Waiting for more fragments\n");
+        //printk("Waiting for more fragments\n");
         return;
 	} 
-
     smp_handler(nb);
     smp_packet_free(nb);
     return;
 }
 
-#define SMP_OP_READ_REQ     0
-#define SMP_OP_READ_RSP     1
-#define SMP_OP_WRITE_REQ    2
-#define SMP_OP_WRITE_RSP    3
-
-#define SMP_GROUP_OS        0
-#define SMP_GROUP_IMG       1
-#define SMP_GROUP_STAT      2
-#define SMP_GROUP_FILE      8
-#define SMP_GROUP_SHELL     9
-
-#define SMP_ID_OS_ECHO      0
-#define SMP_ID_OS_STAT      2
-#define SMP_ID_OS_MEM_STAT  3
-#define SMP_ID_OS_RESET     4
-#define SMP_ID_OS_PARAMS    5
-#define SMP_ID_OS_INFO      6
-
-#define SMP_ID_IMG_STATE    0 
-#define SMP_ID_IMG_UPLOAD   1
-#define SMP_ID_IMG_ERASE    2
-
-
-void  smp_handler(struct net_buf *nb){
+void smp_handler(struct net_buf *nb){
 
     uint8_t rc = 0;
     struct mgmt_hdr nb_hdr;
@@ -1309,23 +1265,23 @@ void  smp_handler(struct net_buf *nb){
     printk("nb_hdr.nh_group: %d\n",nb_hdr.nh_group);
     printk("nb_hdr.nh_id: %d\n",nb_hdr.nh_id);
 
-    if( nb_hdr.nh_op != SMP_OP_READ_RSP && nb_hdr.nh_op != SMP_OP_WRITE_RSP ){
+    if( nb_hdr.nh_op != MGMT_OP_READ_RSP && nb_hdr.nh_op != MGMT_OP_WRITE_RSP ){
         printk("Error: Expected SMP Response.\n");
         return;
     }
 
-    if(nb_hdr.nh_group == SMP_GROUP_OS) {
+    if(nb_hdr.nh_group == MGMT_GROUP_ID_OS) {
         printk("SMP OS handler not implemented yet\n");
     }
-    else if(nb_hdr.nh_group == SMP_GROUP_IMG) {
+    else if(nb_hdr.nh_group == MGMT_GROUP_ID_IMAGE) {
         switch(nb_hdr.nh_id){
-            case SMP_ID_IMG_STATE:
+            case IMG_MGMT_ID_STATE:
                 smp_list_handler(nb);
                 break;
-            case SMP_ID_IMG_UPLOAD:
+            case IMG_MGMT_ID_UPLOAD:
                 printk("SMP img upload handler not implemented yet.\n");
                 break;
-            case SMP_ID_IMG_ERASE:
+            case IMG_MGMT_ID_ERASE:
                 printk("SMP img erase handler not implemented yet.\n");
                 break;
             default:
@@ -1343,8 +1299,12 @@ void  smp_handler(struct net_buf *nb){
 void smp_list_handler(struct net_buf * nb)
 {
 
+    struct smp_buffer buf;
+
+
 	/* Skip the mgmt_hdr */
 	void *new_ptr = net_buf_pull(nb, sizeof(struct mgmt_hdr));
+    memcpy(buf.payload, new_ptr, sizeof(struct net_buf) - sizeof(struct mgmt_hdr));
 
     zcbor_state_t zsd[10];
     struct zcbor_string value = {0};
