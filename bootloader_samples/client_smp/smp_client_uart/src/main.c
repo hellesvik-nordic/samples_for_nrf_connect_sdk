@@ -1049,44 +1049,52 @@ static int send_smp_confirm(struct bt_dfu_smp *dfu_smp)
 
 static int send_smp_test(struct bt_dfu_smp *dfu_smp)
 {
-	static struct smp_buffer smp_cmd;
-	zcbor_state_t zse[CBOR_ENCODER_STATE_NUM];
+    struct mgmt_hdr image_list_header; 
+    struct net_buf *nb; 
 	size_t payload_len;
 
-	zcbor_new_encode_state(zse, ARRAY_SIZE(zse), smp_cmd.payload,
-			       sizeof(smp_cmd.payload), 0);
+    nb = smp_packet_alloc(); 
+
+    zcbor_state_t zs[CBOR_ENCODER_STATE_NUM]; 
+    zcbor_new_encode_state(zs, 2, nb->data + sizeof(struct mgmt_hdr), net_buf_tailroom(nb), 0); 
 
 	/* Stop encoding on the error. */
-	zse->constant_state->stop_on_error = true;
+	zs->constant_state->stop_on_error = true;
 
-	zcbor_map_start_encode(zse, CBOR_MAP_MAX_ELEMENT_CNT);
-	zcbor_tstr_put_lit(zse, "hash");
-	zcbor_bstr_put_lit(zse, hash_value_secondary_slot);
-	zcbor_tstr_put_lit(zse, "confirm");
-	zcbor_bool_put(zse, false);
+	zcbor_map_start_encode(zs, CBOR_MAP_MAX_ELEMENT_CNT);
+	zcbor_tstr_put_lit(zs, "hash");
+	zcbor_bstr_put_lit(zs, hash_value_secondary_slot);
+	zcbor_tstr_put_lit(zs, "confirm");
+	zcbor_bool_put(zs, false); // From SMP Protocol, confirm=false means Test
 	
-	zcbor_map_end_encode(zse, CBOR_MAP_MAX_ELEMENT_CNT);
+	zcbor_map_end_encode(zs, CBOR_MAP_MAX_ELEMENT_CNT);
 
-	if (!zcbor_check_error(zse)) {
-		printk("Failed to encode SMP test packet, err: %d\n", zcbor_pop_error(zse));
+	if (!zcbor_check_error(zs)) {
+		printk("Failed to encode SMP confirm packet, err: %d\n", zcbor_pop_error(zs));
 		return -EFAULT;
 	}
 
-	payload_len = (size_t)(zse->payload - smp_cmd.payload);
+	//payload_len = (size_t)(zs->payload - smp_cmd.payload);
+    
 
-	smp_cmd.header.op = 2; /* Write */
-	smp_cmd.header.flags = 0;
-	smp_cmd.header.len_h8 = (uint8_t)((payload_len >> 8) & 0xFF);
-	smp_cmd.header.len_l8 = (uint8_t)((payload_len >> 0) & 0xFF);
-	smp_cmd.header.group_h8 = 0;
-	smp_cmd.header.group_l8 = 1; /* app/image */
-	smp_cmd.header.seq = 0;
-	smp_cmd.header.id  = 0; /* ECHO */
+    image_list_header.nh_op = MGMT_OP_WRITE; 
+    image_list_header.nh_flags = 0; 
+    image_list_header.nh_len = zs->payload_mut - nb->data -MGMT_HDR_SIZE; 
+    image_list_header.nh_group = MGMT_GROUP_ID_IMAGE; 
+    image_list_header.nh_seq = 0; 
+    image_list_header.nh_id  = IMG_MGMT_ID_STATE; 
+    mgmt_hton_hdr(&image_list_header); 
 
-	return bt_dfu_smp_command(dfu_smp, smp_list_rsp_proc,
-				  sizeof(smp_cmd.header) + payload_len,
-				  &smp_cmd);
+    nb->len = zs->payload_mut - nb->data;
+    memcpy(nb->data, &image_list_header, sizeof(image_list_header)); 
+
+	// confirm has same response as list command
+    uint8_t ret = uart_mcumgr_send(nb->data, nb->len); 
+	net_buf_unref(nb);
+    return 0;
+	// return bt_dfu_smp_command(dfu_smp, smp_list_rsp_proc, sizeof(smp_cmd.header) + payload_len, &smp_cmd);
 }
+
 
 
 
