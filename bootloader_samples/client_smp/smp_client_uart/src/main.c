@@ -931,52 +931,28 @@ void send_upload2(struct k_work *item)
 
 static int send_smp_list(struct bt_dfu_smp *dfu_smp)
 {
-    
-    /* struct mgmt_hdr image_list_header; */
-	/* image_list_header.nh_op = 0; #<{(| read request |)}># */
-	/* image_list_header.nh_flags = 0; */
-	/* image_list_header.nh_len = 0; */
-	/* image_list_header.nh_group = 1; #<{(| IMAGE |)}># */
-	/* image_list_header.nh_seq = 0; */
-	/* image_list_header.nh_id  = 0; #<{(| LIST |)}># */
-    /*  */
-    /* mgmt_hton_hdr(&image_list_header); */
-    /*  */
-    /*  */
-    /* struct net_buf *nb; */
-    /* nb = smp_packet_alloc(); */
-    /*  */
-	/* zcbor_state_t zs[CBOR_ENCODER_STATE_NUM]; */
-    /* zcbor_new_encode_state(zs, 2, nb->data + sizeof(struct mgmt_hdr), net_buf_tailroom(nb), 0); */
-    /*  */
-    /* nb->len = sizeof(struct mgmt_hdr); */
-    /* memcpy(nb->data, &image_list_header, sizeof(image_list_header)); */
+    struct mgmt_hdr image_list_header; 
+    struct net_buf *nb; 
 
-    /* zcbor_list_start_encode(zs,0); */
-    /* zcbor_list_end_encode(zs,0); */
-    /* return uart_mcumgr_send(smp_cmd, sizeof(struct mgmt_hdr)); */
+    image_list_header.nh_op = MGMT_OP_READ; 
+    image_list_header.nh_flags = 0; 
+    image_list_header.nh_len = 0; 
+    image_list_header.nh_group = MGMT_GROUP_ID_IMAGE; 
+    image_list_header.nh_seq = 0; 
+    image_list_header.nh_id  = IMG_MGMT_ID_STATE; 
+    mgmt_hton_hdr(&image_list_header); 
 
+    nb = smp_packet_alloc(); 
 
-	static struct smp_buffer smp_cmd;
-	zcbor_state_t zse[CBOR_ENCODER_STATE_NUM];
-	size_t payload_len;
+    zcbor_state_t zs[CBOR_ENCODER_STATE_NUM]; 
+    zcbor_new_encode_state(zs, 2, nb->data + sizeof(struct mgmt_hdr), net_buf_tailroom(nb), 0); 
+    zcbor_map_start_encode(zs, 1);
+    zcbor_map_end_encode(zs, 1);
 
+    nb->len = sizeof(image_list_header); 
+    memcpy(nb->data, &image_list_header, sizeof(image_list_header)); 
 
-	smp_cmd.header.op = 0; /* read request */
-	smp_cmd.header.flags = 0;
-	smp_cmd.header.len_h8 = 0;
-	smp_cmd.header.len_l8 = 0;
-	smp_cmd.header.group_h8 = 0;
-	smp_cmd.header.group_l8 = 1; /* IMAGE */
-	smp_cmd.header.seq = 0;
-	smp_cmd.header.id  = 0; /* LIST */
-
-
-    return uart_mcumgr_send(&smp_cmd, sizeof(smp_cmd.header));
-
-	//return bt_dfu_smp_command(dfu_smp, smp_list_rsp_proc,
-				  //sizeof(smp_cmd.header),
-				  //&smp_cmd);
+    return uart_mcumgr_send(nb->data, nb->len); 
 }
 
 
