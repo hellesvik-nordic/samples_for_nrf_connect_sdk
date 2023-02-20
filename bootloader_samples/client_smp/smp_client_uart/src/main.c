@@ -183,12 +183,20 @@ void send_upload2(struct k_work *item)
     uint8_t data[UPLOAD_CHUNK+1]; // One more byte, to store '/0'
 
     flash_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_flash_controller));
-    const int last_addr = PM_MCUBOOT_SECONDARY_END_ADDRESS;  
+    // const int last_addr = PM_MCUBOOT_SECONDARY_END_ADDRESS;  
+    const int last_addr = PM_MCUBOOT_SECONDARY_ADDRESS + 60000;
     const int start_addr = PM_MCUBOOT_SECONDARY_ADDRESS;
     static int curr_addr = start_addr;
     int upload_chunk = UPLOAD_CHUNK;
     int err;
-    bool update_complete = false;
+    static bool update_complete = false;
+
+    if(update_complete){
+        printk("Update is complete.\n");
+        update_complete = false;
+        curr_addr = start_addr;
+        return;
+    }
 
     nb = smp_packet_alloc(); 
 
@@ -853,8 +861,6 @@ void main(void)
     int err;
 
     printk("Starting SMP Client over UART sample\n");
-
-    img_mgmt_register_group();
 
     uart_mcumgr_register(smp_uart_rx_frag);
 
