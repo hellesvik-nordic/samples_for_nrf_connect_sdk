@@ -71,7 +71,7 @@ Hold button 1 while resetting the DK. LED1 should light up to indicate serial re
 Upload `app_update.bin` using mcumgr: 
 ```
 mcumgr -c acm0 image list
-mcumgr -c acm0 image upload app_update.bin
+mcumgr -c acm0 image upload app_update.bin -e -n 2
 ```
 After the upload is complete, reset the DK.
 
