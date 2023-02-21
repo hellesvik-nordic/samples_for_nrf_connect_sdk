@@ -345,7 +345,7 @@ static void smp_upload_rsp_proc(struct bt_dfu_smp *dfu_smp)
 		}  else if (value.len != 2) {
 			printk("Invalid data received (rc key). Length %d is not equal 2\n", value.len);
 			return;
-		} else if(!strncmp(value.value, "rc", 2)){
+		} else if(!strncmp(value.value, 'rc', 2)){
 			printk("Invalid data received (rc key). String '%.2s' is not equal to 'rc'\n", value.value);
 			return;
 		}
