@@ -37,7 +37,7 @@ index 09c3aa4..ece1466 100644
 ## Testing
 This sample is tested with two nRF52840DK's and NCS v2.2.0.  
 You need two nRF52840DK's, one for the SMP Client and one for the SMP Server.  
-Connect the SMP Client and SMP Server together with P0.00 and P0.01. Remember to connect TX-RX.
+Connect the SMP Client and SMP Server together with P1.01 and P1.02. Remember to connect TX-RX.
 Connect both NRF52840DK's to a computer using USB cables via the J2 USB header.
 
 ### Prepare SMP Server
