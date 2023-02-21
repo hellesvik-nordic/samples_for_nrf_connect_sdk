@@ -16,7 +16,7 @@ index 09c3aa4..ece1466 100644
  	}
  
  	if (value != result) {
--		ERNG_R_RESTORE(ZCBOR_ERR_WROVALUE);
+-		ERR_RESTORE(ZCBOR_ERR_WRONG_VALUE);
 +		return false;
 +		//ERR_RESTORE(ZCBOR_ERR_WRONG_VALUE);
  	}
@@ -42,7 +42,7 @@ Connect both NRF52840DK's to a computer using USB cables via the J2 USB header.
 
 ### Prepare SMP Server
 Open [SMP Server over UART example](../../smp/mcuboot_smp_uart).  
-Copy [app.update](./app.update) into the SMP Server over UART example.  
+Copy [app.overlay](./app.overlay) into the SMP Server over UART example.  
 Build and flash the SMP Server over UART example:  
 ```
 west build -p -b nrf52840dk_nrf52840
