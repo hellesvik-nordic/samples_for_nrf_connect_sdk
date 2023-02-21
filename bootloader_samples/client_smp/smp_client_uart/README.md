@@ -73,6 +73,7 @@ Upload `app_update.bin` using mcumgr:
 mcumgr -c acm0 image list
 mcumgr -c acm0 image upload app_update.bin -e -n 2
 ```
+(See [Requirements](../../) on how to add a mcumgr connection)
 After the upload is complete, reset the DK.
 
 ### Upload app\_update.bin from SMP Client to SMP Server
