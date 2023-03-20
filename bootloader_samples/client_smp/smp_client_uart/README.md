@@ -16,7 +16,7 @@ index 09c3aa4..ece1466 100644
  	}
  
  	if (value != result) {
--		ERNG_R_RESTORE(ZCBOR_ERR_WROVALUE);
+-		ERR_RESTORE(ZCBOR_ERR_WRONG_VALUE);
 +		return false;
 +		//ERR_RESTORE(ZCBOR_ERR_WRONG_VALUE);
  	}
@@ -37,12 +37,12 @@ index 09c3aa4..ece1466 100644
 ## Testing
 This sample is tested with two nRF52840DK's and NCS v2.2.0.  
 You need two nRF52840DK's, one for the SMP Client and one for the SMP Server.  
-Connect the SMP Client and SMP Server together with P0.00 and P0.01. Remember to connect TX-RX.
+Connect the SMP Client and SMP Server together with P1.01 and P1.02. Remember to connect TX-RX.
 Connect both NRF52840DK's to a computer using USB cables via the J2 USB header.
 
 ### Prepare SMP Server
 Open [SMP Server over UART example](../../smp/mcuboot_smp_uart).  
-Copy [app.update](./app.update) into the SMP Server over UART example.  
+Copy [app.overlay](./app.overlay) into the SMP Server over UART example.  
 Build and flash the SMP Server over UART example:  
 ```
 west build -p -b nrf52840dk_nrf52840
@@ -73,6 +73,7 @@ Upload `app_update.bin` using mcumgr:
 mcumgr -c acm0 image list
 mcumgr -c acm0 image upload app_update.bin -e -n 2
 ```
+(See [Requirements](../../) on how to add a mcumgr connection)
 After the upload is complete, reset the DK.
 
 ### Upload app\_update.bin from SMP Client to SMP Server

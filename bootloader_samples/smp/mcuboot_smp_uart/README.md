@@ -54,7 +54,9 @@ nrfjprog --reset
 
 To update the Network Core, follow the guide above, but for change the "upload" step with the following:
 ```
-mcumgr -c acm1 image upload -n 3 build/zephyr/net_core_app_update.bin
+mcumgr -c acm1 image upload -e -n 3 build/zephyr/net_core_app_update.bin
+mcumgr -c acm1 image list
+mcumgr -c acm1 image test <IMAGE_HASH>
 ```
 Wait 2 minutes for the image to be copied to the netcore, and reset the nRF5340 after.
 

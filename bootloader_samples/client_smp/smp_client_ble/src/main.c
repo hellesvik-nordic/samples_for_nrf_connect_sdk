@@ -250,6 +250,7 @@ static void scan_init(void)
 	bt_scan_init(&scan_init);
 	bt_scan_cb_register(&scan_cb);
 
+
 	err = bt_scan_filter_add(BT_SCAN_FILTER_TYPE_UUID,
 				 BT_UUID_DFU_SMP_SERVICE);
 	if (err) {
@@ -345,7 +346,7 @@ static void smp_upload_rsp_proc(struct bt_dfu_smp *dfu_smp)
 		}  else if (value.len != 2) {
 			printk("Invalid data received (rc key). Length %d is not equal 2\n", value.len);
 			return;
-		} else if(!strncmp(value.value, "rc", 2)){
+		} else if(!strncmp(value.value, 'rc', 2)){
 			printk("Invalid data received (rc key). String '%.2s' is not equal to 'rc'\n", value.value);
 			return;
 		}
@@ -836,7 +837,7 @@ static void progress_print(size_t downloaded, size_t file_size)
 	printk("| (%d/%d bytes)", downloaded, file_size);
 }
 
-#define UPLOAD_CHUNK		50 //This has to be at least 32 bytes, since first it has to send the whole header (which is 32 bytes)
+#define UPLOAD_CHUNK		300 //This has to be at least 32 bytes, since first it has to send the whole header (which is 32 bytes)
 void send_upload2(struct k_work *item)
 {
    	zcbor_state_t zse[2];
@@ -855,6 +856,8 @@ void send_upload2(struct k_work *item)
 	int upload_chunk = UPLOAD_CHUNK;
 	int err;
 	bool update_complete = false;
+    uint64_t off = 0;
+    uint8_t encode_len;
 	while(!update_complete){
 		struct smp_buffer smp_cmd;
 		zcbor_new_encode_state(zse, ARRAY_SIZE(zse), smp_cmd.payload,
@@ -873,22 +876,33 @@ void send_upload2(struct k_work *item)
 			return;
 		}
 
+        off = curr_addr - start_addr;
+        if (off == 0){
+            encode_len = 8;
+        } else {
+            encode_len = 6;
+        }
+
 		data[upload_chunk] = '\0';
 		zse->constant_state->stop_on_error = true;
-		zcbor_map_start_encode(zse, 20);
+		zcbor_map_start_encode(zse, encode_len);
 		zcbor_tstr_put_lit(zse, "image");
 		zcbor_int64_put(zse, 0);
 		zcbor_tstr_put_lit(zse, "data");
 		zcbor_bstr_put_lit(zse, data);
-		zcbor_tstr_put_lit(zse, "len");
-		zcbor_uint64_put(zse, (uint64_t)0x5B68);
+        if(off == 0){
+            zcbor_tstr_put_lit(zse, "len");
+            zcbor_uint64_put(zse, (uint64_t)last_addr-start_addr);
+        }
 		zcbor_tstr_put_lit(zse, "off");
-		zcbor_uint64_put(zse, curr_addr - start_addr);
-		zcbor_tstr_put_lit(zse, "sha");
-		zcbor_bstr_put_lit(zse, "12345");
+		zcbor_uint64_put(zse, off);
+        if(off == 0){
+            zcbor_tstr_put_lit(zse, "sha");
+            zcbor_bstr_put_lit(zse, "12345");
+        }
 		zcbor_tstr_put_lit(zse, "upgrade");
 		zcbor_bool_put(zse, false);
-		zcbor_map_end_encode(zse, 20);
+		zcbor_map_end_encode(zse, encode_len);
 
 		if (!zcbor_check_error(zse)) {
 			printk("Failed to encode SMP test packet, err: %d\n", zcbor_pop_error(zse));
