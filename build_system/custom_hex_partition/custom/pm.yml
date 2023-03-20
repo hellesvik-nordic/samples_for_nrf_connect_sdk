@@ -1,0 +1,4 @@
+custom:
+  size: 0x8000
+  placement: 
+    after: [app]

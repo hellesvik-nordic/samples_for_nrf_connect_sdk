@@ -1,0 +1,10 @@
+app:
+  address: 0x0
+  end_address: 0xf8000
+  region: flash_primary
+  size: 0xf8000
+custom:
+  address: 0xf8000
+  end_address: 0x100000
+  region: flash_primary
+  size: 0x8000

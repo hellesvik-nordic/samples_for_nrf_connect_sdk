@@ -1,0 +1,15 @@
+#
+# Copyright (c) 2022 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+source "Kconfig.zephyr"
+
+config INCLUDE_CUSTOM_IMAGE
+	bool "Include net image as sub image"
+    default y
+	select PARTITION_MANAGER_ENABLED
+
+module=CUSTOM
+source "${ZEPHYR_BASE}/../nrf/subsys/partition_manager/Kconfig.template.build_strategy"
+
