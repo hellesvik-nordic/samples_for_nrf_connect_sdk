@@ -1,0 +1,62 @@
+diff --git a/boot/zephyr/CMakeLists.txt b/boot/zephyr/CMakeLists.txt
+index 2d6a6035..3e64c61f 100644
+--- a/boot/zephyr/CMakeLists.txt
++++ b/boot/zephyr/CMakeLists.txt
+@@ -365,3 +365,33 @@ zephyr_library_sources(
+   ${BOOT_DIR}/zephyr/nrf_cleanup.c
+ )
+ endif()
++
++if(CONFIG_MCUBOOT_ACTION_HOOKS)
++  if(NOT CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH STREQUAL "")
++    # CONF_FILE points to the KConfig configuration files of the bootloader.
++    foreach (filepath ${CONF_FILE})
++      file(READ ${filepath} temp_text)
++      string(FIND "${temp_text}" ${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH} match)
++      if (${match} GREATER_EQUAL 0)
++        if (NOT DEFINED CONF_DIR)
++          get_filename_component(CONF_DIR ${filepath} DIRECTORY)
++        else()
++          message(FATAL_ERROR "Signature key file defined in multiple conf files")
++        endif()
++      endif()
++    endforeach()
++
++    if(IS_ABSOLUTE ${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH})
++      set(ACTION_HOOKS_FILE ${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH})
++    elseif((DEFINED CONF_DIR) AND
++      (EXISTS ${CONF_DIR}/${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH}))
++      set(ACTION_HOOKS_FILE ${CONF_DIR}/${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH})
++    else()
++      set(ACTION_HOOKS_FILE ${MCUBOOT_DIR}/${CONFIG_MCUBOOT_ACTION_HOOKS_FILE_PATH})
++    endif()
++    message("Custom MCUboot Action hooks file: ${ACTION_HOOKS_FILE}")
++    zephyr_library_sources(
++      ${ACTION_HOOKS_FILE}
++      )
++  endif()
++endif()
+diff --git a/boot/zephyr/Kconfig b/boot/zephyr/Kconfig
+index 3c443d04..067c569f 100644
+--- a/boot/zephyr/Kconfig
++++ b/boot/zephyr/Kconfig
+@@ -607,6 +607,19 @@ config MCUBOOT_ACTION_HOOKS
+ 	  'mcuboot_status_type_t' is listed in
+ 	  boot/bootutil/include/bootutil/mcuboot_status.h
+ 
++config MCUBOOT_ACTION_HOOKS_FILE_PATH
++	string "File for MCUboot action hooks"
++  depends on MCUBOOT_ACTION_HOOKS
++	help
++      Must be a .c file.
++      You can use either absolute or relative path.
++      In case relative path is used, the build system assumes that it starts
++      from the directory where the MCUBoot KConfig configuration file is
++      located. If the key file is not there, the build system uses relative
++      path that starts from the MCUBoot repository root directory.
++      The .c file will be added to the MCUboot project source files.
++      The .c file should include 'bootutil/mcuboot_status.h'.
++
+ endmenu
+ 
+ config MCUBOOT_DEVICE_SETTINGS
