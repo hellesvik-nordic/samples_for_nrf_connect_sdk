@@ -1,6 +1,6 @@
 # MCUBoot SMP simple sample
 
-## Prepare the Debelopement Kit
+## Prepare the Developement Kit
 Disable the Mass Storage feature on the Interface MCU, so that it does not interfere:
 ```
 $ JLinkExe 

@@ -1,7 +1,7 @@
 # MCUboot SMP Sample feat Bluetooth Low Energy
 Code to make this work comes from the official [Zephyr SMP Server Sample](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/samples/subsys/mgmt/mcumgr/smp_svr/README.html).
 
-## Prepare the Debelopement Kit
+## Prepare the Developement Kit
 Disable the Mass Storage feature on the Interface MCU, so that it does not interfere:
 ```
 $ JLinkExe 
