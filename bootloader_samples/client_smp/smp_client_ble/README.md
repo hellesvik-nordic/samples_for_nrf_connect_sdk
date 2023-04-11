@@ -1,5 +1,5 @@
 # Bluetooth: Central SMP Client DFU
-This example is copied from https://github.com/simon-iversen/ncs\_samples/tree/master/central\_smp\_client\_dfu.
+This example is copied from [https://github.com/simon-iversen/ncs_samples/tree/master/central_smp_client\_dfu](https://github.com/simon-iversen/ncs_samples/tree/master/central_smp_client\_dfu).
 I also have changed it some.
 
 With this sample you will be able to perform a DFU from one nRF52840DK to another nRF52840DK over Bluetooth Low Energy.

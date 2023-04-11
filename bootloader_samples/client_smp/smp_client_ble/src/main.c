@@ -837,7 +837,7 @@ static void progress_print(size_t downloaded, size_t file_size)
 	printk("| (%d/%d bytes)", downloaded, file_size);
 }
 
-#define UPLOAD_CHUNK		300 //This has to be at least 32 bytes, since first it has to send the whole header (which is 32 bytes)
+#define UPLOAD_CHUNK		150 //This has to be at least 32 bytes, since first it has to send the whole header (which is 32 bytes)
 void send_upload2(struct k_work *item)
 {
    	zcbor_state_t zse[2];
