@@ -8,6 +8,9 @@ ${NCS_PATH}/bootloader/mcuboot/scripts/imgtool.py keygen -k custom_priv.pem -t e
 ```
 Also see the [Imgtool documentation](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/1.9.1/mcuboot/imgtool.html).
 
+## Disclaimer
+This code/configuration is not thoroughly tested or qualified and should be considered provided “as-is”. Please test it with your application and let me know if you find any issues.
+
 
 ## Test that it fails
 After testing this once successfully, try to create a new key as described above.  
