@@ -5,14 +5,10 @@
  */
 
 #include <zephyr/kernel.h>
-#include "img_mgmt/img_mgmt.h"
-#include "os_mgmt/os_mgmt.h"
 #include "bluetooth_smp.h"
 
 void main(void)
 {
-    img_mgmt_register_group();
-    os_mgmt_register_group();
-    start_smp_bluetooth();
+  start_smp_bluetooth();
 	printk("Change this to see it change.\n");
 }

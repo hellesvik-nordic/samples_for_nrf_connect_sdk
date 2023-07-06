@@ -8,7 +8,7 @@
 #include <zephyr/bluetooth/bluetooth.h>
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/gatt.h>
-#include <zephyr/mgmt/mcumgr/smp_bt.h>
+#include <zephyr/mgmt/mcumgr/transport/smp_bt.h>
 
 #define LOG_LEVEL LOG_LEVEL_DBG
 #include <zephyr/logging/log.h>
@@ -82,6 +82,4 @@ void start_smp_bluetooth(void)
 		return;
 	}
 
-	/* Initialize the Bluetooth mcumgr transport. */
-	smp_bt_register();
 }
