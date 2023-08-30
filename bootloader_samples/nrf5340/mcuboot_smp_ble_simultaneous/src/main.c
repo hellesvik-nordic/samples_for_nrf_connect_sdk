@@ -23,7 +23,7 @@ static const struct bt_data ad[] = {
 void main(void)
 {
   int err = 0;
-	printk("AAA this to see it change.\n");
+	printk("Change this to see it change.\n");
 
 	err = bt_enable(NULL);
 	if (err) {
