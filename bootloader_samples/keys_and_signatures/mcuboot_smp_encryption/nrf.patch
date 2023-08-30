@@ -1,0 +1,79 @@
+diff --git a/cmake/multi_image.cmake b/cmake/multi_image.cmake
+index 13b4d5d00..9b89b342d 100644
+--- a/cmake/multi_image.cmake
++++ b/cmake/multi_image.cmake
+@@ -20,6 +20,13 @@ if(IMAGE_NAME)
+     set_shared(IMAGE ${IMAGE_NAME} PROPERTY SIGNATURE_KEY_FILE ${CONFIG_BOOT_SIGNATURE_KEY_FILE})
+   endif()
+ 
++  # Share the encryption key file so that the parent image can use it to
++  # generate encrypted update candidates.
++  if(CONFIG_BOOT_ENCRYPTION_KEY_FILE)
++    set_shared(IMAGE ${IMAGE_NAME} PROPERTY ENCRYPTION_KEY_FILE ${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++  endif()
++
++
+   generate_shared(IMAGE ${IMAGE_NAME} FILE ${CMAKE_BINARY_DIR}/shared_vars.cmake)
+ else()
+   # Store a preload file with whatever configurations are required to create
+diff --git a/modules/mcuboot/CMakeLists.txt b/modules/mcuboot/CMakeLists.txt
+index 2b5c42168..228277a4a 100644
+--- a/modules/mcuboot/CMakeLists.txt
++++ b/modules/mcuboot/CMakeLists.txt
+@@ -116,6 +116,10 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
+       set(sign_dependencies "-d;\"${SIGN_ARG_IMAGE_DEPENDENCIES}\"")
+     endif()
+ 
++    if (DEFINED mcuboot_enc_key)
++      set(encryption_command --encrypt ${mcuboot_enc_key})
++    endif()
++
+     add_custom_command(
+       OUTPUT
+       ${signed_hex}            # Signed hex of input hex.
+@@ -159,6 +159,7 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
+       COMMAND
+       # Sign the binary version of the input hex file.
+       ${sign_cmd}
++      ${encryption_command}
+       ${sign_dependencies}
+       ${SIGN_ARG_ROM_FIXED}
+       --slot-size ${SIGN_ARG_SLOT_SIZE}
+@@ -280,6 +285,28 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
+     endif()
+   endif()
+ 
++  if (NOT DEFINED ${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++  get_shared(mcuboot_enc_key IMAGE mcuboot PROPERTY ENCRYPTION_KEY_FILE)
++  set(CONFIG_BOOT_ENCRYPTION_KEY_FILE ${mcuboot_enc_key})
++endif ()
++
++foreach (filepath ${mcuboot_CONF_FILE})
++  file(STRINGS ${filepath} mcuboot_CONFIG_BOOT_ENCRYPTION_KEY_FILE
++       REGEX "^CONFIG_BOOT_ENCRYPTION_KEY_FILE=")
++  if (mcuboot_CONFIG_BOOT_ENCRYPTION_KEY_FILE)
++    get_filename_component(mcuboot_CONF_DIR ${filepath} DIRECTORY)
++  endif()
++endforeach()
++
++if(IS_ABSOLUTE ${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++  set(mcuboot_enc_key ${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++elseif (DEFINED mcuboot_CONF_DIR)
++  if (EXISTS ${mcuboot_CONF_DIR}/${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++    set(mcuboot_enc_key ${mcuboot_CONF_DIR}/${CONFIG_BOOT_ENCRYPTION_KEY_FILE})
++  endif()
++endif()
++
++
+   if(CONFIG_SIGN_IMAGES)
+     # Set default key
+     if (NOT DEFINED mcuboot_key_file)
+@@ -293,6 +320,8 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
+       set(mcuboot_key_file ${ZEPHYR_MCUBOOT_MODULE_DIR}/${CONFIG_BOOT_SIGNATURE_KEY_FILE})
+     endif()
+ 
++
++
+     set(app_core_binary_name app_update.bin)
+ 
+     execute_process(COMMAND
