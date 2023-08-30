@@ -6,7 +6,7 @@ Please read the disclaimer.
 ## Disclaimer
 This code/configuration is not thoroughly tested or qualified and should be considered provided “as-is”. Please test it with your application and let me know if you find any issues.  
 This sample uses symmetric encryption. If someone breaks into a device and steals the key, they can decrypted firmware updates.  
-Encryption does not replace signing of images, and this sample uses default mcuboot keys for signing. See [MCUBoot Custom Key with SMP Server](../mcuboot_smp_custom_key) for how a custom key can be added.
+Encryption does not replace signing of images, and this sample uses default mcuboot keys for signing. See [MCUBoot Custom Key with SMP Server](../mcuboot_smp_custom_key) for how a custom signing key can be added.
 
 ## Docs
 See [MCUboot: Encryped images](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/v2.4.0/mcuboot/encrypted_images.html) for an explanation on how MCUboot handles encryption.
