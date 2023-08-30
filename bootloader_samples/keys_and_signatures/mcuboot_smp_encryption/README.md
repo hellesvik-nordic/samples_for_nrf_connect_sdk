@@ -22,7 +22,7 @@ git apply <PATH_TO>/nrf.patch
 ## Key generation
 The `custom_key_dir/encryption_key.pem` key was generated using:
 ```
-${NCS_PATH}/bootloader/mcuboot/scripts/imgtool.py keygen -k custom_priv.pem -t ecdsa-p256
+${NCS_PATH}/bootloader/mcuboot/scripts/imgtool.py keygen -k custom_key_dir/encryption_key.pem -t ecdsa-p256
 ```
 
 ## Run sample
