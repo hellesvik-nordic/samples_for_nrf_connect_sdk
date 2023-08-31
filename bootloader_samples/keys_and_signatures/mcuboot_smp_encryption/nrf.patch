@@ -31,6 +31,15 @@ index 2b5c42168..228277a4a 100644
      add_custom_command(
        OUTPUT
        ${signed_hex}            # Signed hex of input hex.
+@@ -131,6 +135,8 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
+       # to be applied by mcuboot, the application is required to write the
+       # IMAGE_MAGIC into the image trailer.
+       ${sign_cmd}
++      ${encryption_command}
++      --clear
+       ${sign_dependencies}
+       ${SIGN_ARG_ROM_FIXED}
+       --slot-size ${SIGN_ARG_SLOT_SIZE}
 @@ -159,6 +159,7 @@ if(CONFIG_BOOTLOADER_MCUBOOT)
        COMMAND
        # Sign the binary version of the input hex file.
