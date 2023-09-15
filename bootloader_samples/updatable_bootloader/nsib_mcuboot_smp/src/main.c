@@ -5,10 +5,8 @@
  */
 
 #include <zephyr/kernel.h>
-#include "img_mgmt/img_mgmt.h"
 
 void main(void)
 {
-    img_mgmt_register_group();
 	printk("Change this to see change\n");
 }
