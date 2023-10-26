@@ -6,7 +6,8 @@
 
 #include <zephyr/kernel.h>
 
-void main(void)
+int main(void)
 {
 	printk("Change this to see it change.\n");
+  return 1;
 }
