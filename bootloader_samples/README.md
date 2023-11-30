@@ -6,8 +6,13 @@ For some proper theory on Bootloaders and Device Firmware Upgrade (DFU), see the
 ## Requirements
 Most of the samples here use [mcumgr](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/2.1.0/zephyr/services/device_mgmt/mcumgr.html) to perform DFU. I recommend that you install it before starting.  
 Find which serial connection the Developement Kit is connected to. This sample assumes /dev/ttyACM0.  
+Linux:
 ```
 mcumgr conn add acm0 type="serial" connstring="dev=/dev/ttyACM0,baud=115200,mtu=512"
+```
+Windows:
+```
+mcumgr conn add com20 type="serial" connstring="COM20,baud=115200,mtu=512"
 ```
 
 ## Quick Start
