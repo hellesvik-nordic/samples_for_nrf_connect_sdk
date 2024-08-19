@@ -1,6 +1,9 @@
 # PSA CSR sample
 This sample (will soon) show how to do a Certificate Signing Request (CSR) with the PSA Crypto APIs.
 
+# TF-M
+This sample was tested without Trusted Firmware-M. It gets some build errors with, but I beleive this should be mostly due to different default configuration with TF-M.
+
 ## Patching sdk-nrf
 To run the sample, you need to apply a patch first:
 ```
