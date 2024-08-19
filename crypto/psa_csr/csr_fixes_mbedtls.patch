@@ -1,0 +1,51 @@
+diff --git a/library/oid.c b/library/oid.c
+index 6184abe40..a9778bcb5 100644
+--- a/library/oid.c
++++ b/library/oid.c
+@@ -378,7 +378,6 @@ typedef struct {
+ 
+ static const oid_sig_alg_t oid_sig_alg[] =
+ {
+-#if defined(MBEDTLS_RSA_C)
+ #if defined(MBEDTLS_MD_CAN_MD5)
+     {
+         OID_DESCRIPTOR(MBEDTLS_OID_PKCS1_MD5,        "md5WithRSAEncryption",     "RSA with MD5"),
+@@ -425,7 +424,6 @@ static const oid_sig_alg_t oid_sig_alg[] =
+         MBEDTLS_MD_SHA1,     MBEDTLS_PK_RSA,
+     },
+ #endif /* MBEDTLS_MD_CAN_SHA1 */
+-#endif /* MBEDTLS_RSA_C */
+ #if defined(MBEDTLS_PK_CAN_ECDSA_SOME)
+ #if defined(MBEDTLS_MD_CAN_SHA1)
+     {
+diff --git a/library/pk_wrap.c b/library/pk_wrap.c
+index f9a439ae2..aa9e187ec 100644
+--- a/library/pk_wrap.c
++++ b/library/pk_wrap.c
+@@ -1753,7 +1753,6 @@ static int rsa_opaque_sign_wrap(mbedtls_pk_context *pk, mbedtls_md_type_t md_alg
+                                 unsigned char *sig, size_t sig_size, size_t *sig_len,
+                                 int (*f_rng)(void *, unsigned char *, size_t), void *p_rng)
+ {
+-#if defined(MBEDTLS_RSA_C)
+     psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+     psa_algorithm_t alg;
+     psa_key_type_t type;
+@@ -1789,18 +1788,6 @@ static int rsa_opaque_sign_wrap(mbedtls_pk_context *pk, mbedtls_md_type_t md_alg
+     }
+ 
+     return 0;
+-#else /* !MBEDTLS_RSA_C */
+-    ((void) pk);
+-    ((void) md_alg);
+-    ((void) hash);
+-    ((void) hash_len);
+-    ((void) sig);
+-    ((void) sig_size);
+-    ((void) sig_len);
+-    ((void) f_rng);
+-    ((void) p_rng);
+-    return MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE;
+-#endif /* !MBEDTLS_RSA_C */
+ }
+ 
+ const mbedtls_pk_info_t mbedtls_rsa_opaque_info = {
