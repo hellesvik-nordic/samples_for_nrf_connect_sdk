@@ -88,7 +88,7 @@ int crypto_finish(void)
 {
 	psa_status_t status;
 
-  mbedtls_pk_free(&csr_pk_ctx);
+  //mbedtls_pk_free(&csr_pk_ctx);
 
 	/* Destroy the key handle */
 	status = psa_destroy_key(keypair_handle);
@@ -230,25 +230,11 @@ static int psa_rng_for_mbedtls(void *p_rng,
 	return psa_generate_random(output, output_len);
 }
 
-/**
- * @brief Signing wrapper to use PSA instead of mbedtls to RSA for the CSR. 
- *        This way we wont need legacy
- */
-
-static int psa_rsa_opaque_sign_wrap(mbedtls_pk_context *pk, mbedtls_md_type_t md_alg,
-                                const unsigned char *hash, size_t hash_len,
-                                unsigned char *sig, size_t sig_size, size_t *sig_len,
-                                int (*f_rng)(void *, unsigned char *, size_t), void *p_rng)
-{
-
-
-}
-
 int certificate_signing_request(void){
   int status = 0;
 
-	unsigned char output_buf[1024];
-	unsigned char json_encoded_buf[1024];
+	unsigned char output_buf[2048];
+	unsigned char json_encoded_buf[2048];
 
 	struct csr_json_struct csr_json = {
 		.CSR = output_buf
@@ -314,7 +300,7 @@ int certificate_signing_request(void){
 
 	LOG_INF("Certificate Signing Request in JSON:\n");
 
-	printf("%s\n", json_encoded_buf);
+	printk("%s\n", json_encoded_buf);
 
   return APP_SUCCESS;
 }
