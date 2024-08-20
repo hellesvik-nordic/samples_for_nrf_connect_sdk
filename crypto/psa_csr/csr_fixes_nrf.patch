@@ -1,11 +1,12 @@
 diff --git a/subsys/nrf_security/cmake/psa_crypto_config.cmake b/subsys/nrf_security/cmake/psa_crypto_config.cmake
-index 42075a55cd..b208786ad9 100644
+index 42075a55cd..9b15b6a7a4 100644
 --- a/subsys/nrf_security/cmake/psa_crypto_config.cmake
 +++ b/subsys/nrf_security/cmake/psa_crypto_config.cmake
-@@ -556,13 +556,13 @@ if (NOT CONFIG_MBEDTLS_PSA_CRYPTO_SPM)
+@@ -555,14 +555,14 @@ if (NOT CONFIG_MBEDTLS_PSA_CRYPTO_SPM)
+   kconfig_check_and_set_base_int(MBEDTLS_MPI_MAX_SIZE)
  
    # x509 configurations
-   # kconfig_check_and_set_base_to_one(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_USE_C)
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_PARSE_C)
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRL_PARSE_C)
@@ -13,13 +14,14 @@ index 42075a55cd..b208786ad9 100644
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CREATE_C)
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_WRITE_C)
 -  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_WRITE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_USE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_PARSE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRL_PARSE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_PARSE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CREATE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_WRITE_C)
-+   kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_WRITE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_USE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRL_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CREATE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_WRITE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_WRITE_C)
  
    # TLS key exchange
    kconfig_check_and_set_base_to_one(MBEDTLS_KEY_EXCHANGE_PSK_ENABLED)
