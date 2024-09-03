@@ -1,0 +1,8 @@
+/* Required by nRF54L15 for now */
+/ {
+
+	aliases {
+		mcuboot-button0 = &button0;
+		mcuboot-led0 = &led0;
+	};
+};
