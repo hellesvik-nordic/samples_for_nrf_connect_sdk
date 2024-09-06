@@ -50,7 +50,7 @@ index 644591a3f6..61233713e4 100644
 +#define MBEDTLS_PEM_WRITE_C
 +
 +/* Define as a "hack" since it is required by the above. */
-+#define MBEDTLS_BASE64_H
++#define MBEDTLS_BASE64_C
 +
  #include <psa/core_unsupported_ciphers_check.h>
  
