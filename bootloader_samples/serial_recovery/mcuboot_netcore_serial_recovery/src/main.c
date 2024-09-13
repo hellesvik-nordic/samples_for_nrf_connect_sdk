@@ -1,4 +1,5 @@
-/* Copyright (c) 2012-2014 Wind River Systems, Inc.
+/*
+ * Copyright (c) 2012-2014 Wind River Systems, Inc.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -7,5 +8,5 @@
 
 void main(void)
 {
-	printk("Change this to see it change.\n");
+    printk("AAA this to see change.\n");
 }
