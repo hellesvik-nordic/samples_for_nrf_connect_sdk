@@ -1,4 +1,4 @@
-mcuboot_secondary_1:
+EMPTY_0:
   address: 0xfc000
   end_address: 0x100000
   placement:
@@ -66,6 +66,11 @@ mcuboot_secondary:
   share_size:
   - mcuboot_primary
   size: 0x78000
+mcuboot_secondary_1:
+  address: 0x84000
+  end_address: 0xc4000
+  region: flash_primary
+  size: 0x40000
 otp:
   address: 0xff8100
   end_address: 0xff83fc
