@@ -1,0 +1,57 @@
+diff --git a/subsys/nrf_security/cmake/psa_crypto_config.cmake b/subsys/nrf_security/cmake/psa_crypto_config.cmake
+index 42075a55cd..9b15b6a7a4 100644
+--- a/subsys/nrf_security/cmake/psa_crypto_config.cmake
++++ b/subsys/nrf_security/cmake/psa_crypto_config.cmake
+@@ -555,14 +555,14 @@ if (NOT CONFIG_MBEDTLS_PSA_CRYPTO_SPM)
+   kconfig_check_and_set_base_int(MBEDTLS_MPI_MAX_SIZE)
+ 
+   # x509 configurations
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_USE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_PARSE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRL_PARSE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_PARSE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CREATE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_WRITE_C)
+-  # kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_WRITE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_USE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRL_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_PARSE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CREATE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CRT_WRITE_C)
++  kconfig_check_and_set_base_to_one(MBEDTLS_X509_CSR_WRITE_C)
+ 
+   # TLS key exchange
+   kconfig_check_and_set_base_to_one(MBEDTLS_KEY_EXCHANGE_PSK_ENABLED)
+diff --git a/subsys/nrf_security/configs/psa_crypto_config.h.template b/subsys/nrf_security/configs/psa_crypto_config.h.template
+index 644591a3f6..61233713e4 100644
+--- a/subsys/nrf_security/configs/psa_crypto_config.h.template
++++ b/subsys/nrf_security/configs/psa_crypto_config.h.template
+@@ -570,6 +570,25 @@
+ #define MBEDTLS_CIPHER_MODE_CBC
+ #endif
+ 
++/**
++ * \def MBEDTLS_PEM_WRITE_C
++ *
++ * Enable PEM encoding / writing.
++ *
++ * Module:  library/pem.c
++ * Caller:  library/pkwrite.c
++ *          library/x509write_crt.c
++ *          library/x509write_csr.c
++ *
++ * Requires: MBEDTLS_BASE64_C
++ *
++ * This modules adds support for encoding / writing PEM files.
++ */
++#define MBEDTLS_PEM_WRITE_C
++
++/* Define as a "hack" since it is required by the above. */
++#define MBEDTLS_BASE64_C
++
+ #include <psa/core_unsupported_ciphers_check.h>
+ 
+ #include <check_crypto_config.h>
