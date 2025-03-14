@@ -1,0 +1,14 @@
+/ {
+	aliases {
+		test-comp = &comp;
+	};
+};
+
+&comp {
+	compatible = "nordic,nrf-lpcomp";
+	psel = "AIN4"; /* P0.28 for 52840DK */
+	refsel = "VDD_4_8"; /* This is the start value. 
+                         We will reconfiger in main.c */
+	status = "okay";
+	enable-hyst;
+};
