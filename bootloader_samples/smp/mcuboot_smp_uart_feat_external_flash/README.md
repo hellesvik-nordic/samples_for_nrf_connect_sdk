@@ -5,3 +5,6 @@ See [Partition Manager docs](https://developer.nordicsemi.com/nRF_Connect_SDK/do
 For an official sample, see [this external flash test](https://github.com/nrfconnect/sdk-nrf/tree/main/tests/modules/mcuboot/external_flash) for an official sample.
 See [Multi-image builds](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/app_dev/multi_image/index.html) for folder structure.
 
+## DevAcademy
+I recommend following [Nordic DevAcademy on Bootloaders/DFU](https://academy.nordicsemi.com/courses/nrf-connect-sdk-intermediate/lessons/lesson-9-bootloaders-and-dfu-fota/) instead of this sample.
+

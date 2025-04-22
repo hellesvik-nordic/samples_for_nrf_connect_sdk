@@ -7,8 +7,10 @@
 #include <zephyr/kernel.h>
 #include "bluetooth_smp.h"
 
-void main(void)
+int main(void)
 {
-  start_smp_bluetooth();
+  start_smp_bluetooth_adverts();
 	printk("Change this to see it change.\n");
+
+  return 0;
 }
