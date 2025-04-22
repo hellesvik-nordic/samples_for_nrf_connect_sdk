@@ -1,5 +1,8 @@
 # MCUBoot Serial Recovery over UART Sample
 
+## DevAcademy
+I recommend following [Nordic DevAcademy on Bootloaders/DFU](https://academy.nordicsemi.com/courses/nrf-connect-sdk-intermediate/lessons/lesson-9-bootloaders-and-dfu-fota/) instead of this sample.
+
 ## Prepare the Developement Kit
 Disable the Mass Storage feature on the device, so that it does not interfere:
 ```
