@@ -8,5 +8,5 @@
 
 void main(void)
 {
-	printk("Change this to see it change\n");
+	printk("AAA\n");
 }
