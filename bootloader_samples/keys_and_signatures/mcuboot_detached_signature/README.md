@@ -1,4 +1,4 @@
-#MCUboot detached signature DFU
+# MCUboot detached signature DFU
 
 See the scripts/ folder for how to sign with detached signatures. This script should be quite self-explanetory. Let me know if it is not.
 
