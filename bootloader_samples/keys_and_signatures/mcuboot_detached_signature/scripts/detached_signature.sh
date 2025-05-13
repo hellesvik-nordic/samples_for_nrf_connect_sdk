@@ -41,7 +41,17 @@ flash_clean() {
 BLACK_BOX_PATH="scripts/black_box"
 black_box_init() {
   echo "------------black_box_init--------------------"
-  source ${BLACK_BOX_PATH}/init.sh # Will generate a public key for us inside our keys dir.
+  source ${BLACK_BOX_PATH}/init.sh # Will generate a public key inside the keys dir
+}
+
+black_box_sign_digest() {
+  echo "------------black_box_sign_digest--------------------"
+  source ${BLACK_BOX_PATH}/sign_digest.sh # Will generate a signature inside the data dir
+}
+
+black_box_sign_payload() {
+  echo "------------black_box_sign_digest--------------------"
+  source ${BLACK_BOX_PATH}/sign_payload.sh # Will generate a signature inside the data dir
 }
 
 write_public_key_to_build() {
@@ -51,27 +61,56 @@ write_public_key_to_build() {
   west build # Rebuild to compile in the new key
 }
 
+
 VERSION="1.0.0"
 HEADER_SIZE=0x200
 MCUBOOT_PRIMARY_SIZE=0x7a000 # From device partitioning. 
 ALIGN=4
 
-attatched_sig_manually_generate_signed_hex_for_programming(){
+DIGEST=${DATA_PATH}/digest.bin
+generate_app_digest() {
+  echo "------------generate_app_digest--------------------"
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header --vector-to-sign digest ${APP_HEX} ${DIGEST}
+}
+
+PAYLOAD=${DATA_PATH}/payload.bin
+generate_app_payload() {
+  echo "------------generate_app_payload--------------------"
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header --vector-to-sign payload ${APP_HEX} ${PAYLOAD}
+}
+
+sign_hex_with_signature() {
+  echo "------------sign_hex_with_signature--------------------"
+  openssl base64 -in ${DATA_PATH}/signature.sig -out ${DATA_PATH}/signature.b64
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header --fix-sig-pubkey ${KEYS_PATH}/public_key.pem --fix-sig ${DATA_PATH}/signature.b64 ${APP_HEX} ${APP_SIGNED_HEX}
+}
+
+# Debug functions below --------------------
+
+cheat_sign_image(){
+  APP_SIGNED_HEX=$DATA_PATH/cheat.signed.hex
+  APP_SIGNED_BIN=$DATA_PATH/cheat.signed.bin
   echo "------------manually_generate_signed_hex_for_programming--------------------"
   # Only for testing. If we do not have access to the private key, this method can not be used.
   # imgtool sign [options] INFILE OUTFILE
-  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header -k ${KEYS_PATH}/priv.pem ${APP_HEX} ${APP_SIGNED_HEX}
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} --pad-header -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} -k ${BLACK_BOX_PATH}/private_key.pem ${APP_HEX} ${APP_SIGNED_HEX}
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} --pad-header -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} -k ${BLACK_BOX_PATH}/private_key.pem ${APP_BIN} ${APP_SIGNED_BIN}
+}
+
+dumpinfo(){
+  imgtool dumpinfo $DATA_PATH/zephyr.signed.bin > $DATA_PATH/zephyr.signed.dump
+  imgtool dumpinfo $DATA_PATH/cheat.signed.bin > $DATA_PATH/cheat.signed.dump
 }
 
 # build_clean
-black_box_init
-sleep 1
+# black_box_init
 write_public_key_to_build
-# attatched_sig_manually_generate_signed_hex_for_programming
-# sleep 2
-# flash_clean
+generate_app_payload
+black_box_sign_payload
+sign_hex_with_signature
+flash_clean
+cheat_sign_image
+dumpinfo
 
-
-# imgtool2.py sign -v $VERSION -H $HEADER_SIZE -S $MCUBOOT_PRIMARY_SIZE --align $ALIGN  --vector-to-sign payload  --pad-header $APP_HEX $DATA_PATH/data_to_sign.bin
 )
 
