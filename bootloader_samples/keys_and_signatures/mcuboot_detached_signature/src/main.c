@@ -8,6 +8,6 @@
 
 int main(void)
 {
-	printk("AAA\n");
+	printk("Change this to see change\n");
   return 0;
 }
