@@ -10,12 +10,14 @@ fi
 
 alias imgtool="${HOME}/nrf_connect_sdk/bootloader/mcuboot/scripts/imgtool.py"
 
+KEYS_PATH="keys_and_data/keys"
+DATA_PATH="keys_and_data/data"
 
 PROJECT_NAME="$(basename "$PWD")"
-DEBUGGER_SNR=682244907
-
+DEBUGGER_SNR=683304854
 
 APP_HEX="build/$PROJECT_NAME/zephyr/zephyr.hex"
+APP_BIN="build/$PROJECT_NAME/zephyr/zephyr.bin"
 MCUBOOT_HEX="build/mcuboot/zephyr/zephyr.hex"
 APP_SIGNED_HEX=$DATA_PATH/zephyr.signed.hex
 APP_SIGNED_BIN=$DATA_PATH/zephyr.signed.bin
@@ -24,7 +26,7 @@ APP_SIGNED_BIN=$DATA_PATH/zephyr.signed.bin
 build_clean() {
   echo "------------build_clean--------------------"
   rm -r build/
-  west build -p -b nrf52dk/nrf52832
+  west build -p -b nrf52840dk/nrf52840
 }
 
 flash_clean() {
@@ -36,36 +38,38 @@ flash_clean() {
   nrfutil device reset
 }
 
-generate_private_key() {
-  echo "------------generate_private_key--------------------"
-  imgtool keygen -k $KEYS_PATH/priv.pem -t rsa-2048
+BLACK_BOX_PATH="scripts/black_box"
+black_box_init() {
+  echo "------------black_box_init--------------------"
+  source ${BLACK_BOX_PATH}/init.sh # Will generate a public key for us inside our keys dir.
 }
 
 write_public_key_to_build() {
   echo "------------write_public_key_to_build--------------------"
-  imgtool getpub -k $KEYS_PATH/priv.pem > $KEYS_PATH/pub.c
+  imgtool getpub -k $KEYS_PATH/public_key.pem > $KEYS_PATH/pub.c # Convert .pem to .c for MCUboot
   cp $KEYS_PATH/pub.c build/mcuboot/zephyr/autogen-pubkey.c
+  west build # Rebuild to compile in the new key
 }
 
 VERSION="1.0.0"
 HEADER_SIZE=0x200
-MCUBOOT_PRIMARY_SIZE=0x39e00 # From device partitioning. 
-ALIGN=8
+MCUBOOT_PRIMARY_SIZE=0x7a000 # From device partitioning. 
+ALIGN=4
 
 attatched_sig_manually_generate_signed_hex_for_programming(){
   echo "------------manually_generate_signed_hex_for_programming--------------------"
-  #imgtool sign [options] INFILE OUTFILE
-  imgtool sign -v $VERSION -H $HEADER_SIZE -S $MCUBOOT_PRIMARY_SIZE --align $ALIGN --pad-header -k $KEYS_PATH/priv.pem $APP_HEX $APP_SIGNED_HEX
-  imgtool sign -v $VERSION -H $HEADER_SIZE -S $MCUBOOT_PRIMARY_SIZE --align $ALIGN --pad-header -k $KEYS_PATH/priv.pem $APP_HEX $APP_SIGNED_BIN
+  # Only for testing. If we do not have access to the private key, this method can not be used.
+  # imgtool sign [options] INFILE OUTFILE
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header -k ${KEYS_PATH}/priv.pem ${APP_HEX} ${APP_SIGNED_HEX}
 }
 
-get_
-
 # build_clean
-generate_private_key
+black_box_init
+sleep 1
 write_public_key_to_build
-attatched_sig_manually_generate_signed_hex_for_programming
-flash_clean
+# attatched_sig_manually_generate_signed_hex_for_programming
+# sleep 2
+# flash_clean
 
 
 # imgtool2.py sign -v $VERSION -H $HEADER_SIZE -S $MCUBOOT_PRIMARY_SIZE --align $ALIGN  --vector-to-sign payload  --pad-header $APP_HEX $DATA_PATH/data_to_sign.bin
