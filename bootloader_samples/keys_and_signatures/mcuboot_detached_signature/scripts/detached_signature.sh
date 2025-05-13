@@ -85,6 +85,13 @@ sign_hex_with_signature() {
   imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header --fix-sig-pubkey ${KEYS_PATH}/public_key.pem --fix-sig ${DATA_PATH}/signature.b64 ${APP_HEX} ${APP_SIGNED_HEX}
 }
 
+sign_bin_with_signature() {
+  echo "------------sign_hex_with_signature--------------------"
+  openssl base64 -in ${DATA_PATH}/signature.sig -out ${DATA_PATH}/signature.b64
+  imgtool sign -v ${VERSION} -H ${HEADER_SIZE} -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} --pad-header --fix-sig-pubkey ${KEYS_PATH}/public_key.pem --fix-sig ${DATA_PATH}/signature.b64 ${APP_BIN} ${APP_SIGNED_BIN}
+}
+
+
 # Debug functions below --------------------
 
 cheat_sign_image(){
@@ -97,20 +104,35 @@ cheat_sign_image(){
   imgtool sign -v ${VERSION} -H ${HEADER_SIZE} --pad-header -S ${MCUBOOT_PRIMARY_SIZE} --align ${ALIGN} -k ${BLACK_BOX_PATH}/private_key.pem ${APP_BIN} ${APP_SIGNED_BIN}
 }
 
+cheat_flash() {
+  APP_SIGNED_HEX=$DATA_PATH/cheat.signed.hex
+  APP_SIGNED_BIN=$DATA_PATH/cheat.signed.bin
+  echo "------------flash_clean--------------------"
+  nrfutil device erase
+  nrfutil device recover
+  nrfutil device program --serial-number $DEBUGGER_SNR --firmware $MCUBOOT_HEX
+  nrfutil device program --serial-number $DEBUGGER_SNR --firmware $APP_SIGNED_HEX --options chip_erase_mode=ERASE_RANGES_TOUCHED_BY_FIRMWARE
+  nrfutil device reset
+}
+
 dumpinfo(){
   imgtool dumpinfo $DATA_PATH/zephyr.signed.bin > $DATA_PATH/zephyr.signed.dump
   imgtool dumpinfo $DATA_PATH/cheat.signed.bin > $DATA_PATH/cheat.signed.dump
 }
 
-# build_clean
-# black_box_init
-write_public_key_to_build
+# Runs script. Remember to comment out functions when not needed anymore
+black_box_init # Generate keys. Use only once
+write_public_key_to_build 
 generate_app_payload
 black_box_sign_payload
-sign_hex_with_signature
-flash_clean
-cheat_sign_image
-dumpinfo
+sign_hex_with_signature # Only use this on first flash
+flash_clean # Only use this on first flash. 
+sign_bin_with_signature # Generate zephyr.signed.bin for DFU
+
+# Debugging functions below
+# cheat_sign_image
+# cheat_flash
+# dumpinfo
 
 )
 

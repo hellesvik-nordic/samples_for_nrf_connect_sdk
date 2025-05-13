@@ -6,7 +6,8 @@
 
 #include <zephyr/kernel.h>
 
-void main(void)
+int main(void)
 {
 	printk("AAA\n");
+  return 0;
 }
