@@ -1,5 +1,7 @@
 # MCUboot detached signature DFU
 
+This sample answers the question "How can I sign an image with MCUboot if I cannot access my private key directly?"
+
 See the scripts/ folder for how to sign with detached signatures. This script should be quite self-explanetory. Let me know if it is not.
 
 This sample uses UART for transport, so see [Simple SMP Sample over UART](../../smp/mcuboot_smp_uart) for how to do DFU with it.
